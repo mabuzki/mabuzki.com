@@ -1,0 +1,100 @@
+<template id="template">
+	<section class="section">
+		<div class="container page-setting-account-section">
+			<h2 class="title is-3">资料</h2>
+			<div class="field avatar">
+				<h4 class="title is-5">头像</h4>
+				<div class="media">
+					<div class="media-content">
+						个性明显的头像能帮助你找到趣味相投的朋友<br>请勿使用暴力色情反动及其他不和谐的图片作为头像
+					</div>
+					<div class="media-right profile-avatar-editing">
+						<div class="profile-avatar-image">
+							<img v-bind:src="userAvatar" class="image is-128x128 avatar">
+						</div>
+						<div class="profile-avatar-overlay"></div>
+						<div class="profile-avatar-select">
+							<button type="button" class="profile-avatar-picker" @click.prevent.stop="avatar_picker">
+								<div class="item pick">
+									<i class="fa fa-image"></i>
+									更换头像
+								</div>
+							</button>
+						</div>
+					</div>
+				</div>
+			</div>
+			<form method="POST" @submit.prevent="post_signature">
+				<div class="field mail">
+					<h4 class="title is-5">签名</h4>
+					<div class="media">
+						<div class="media-content">
+							<div class="control has-icons-left has-icons-right">
+								<textarea class="textarea" placeholder="个人签名"
+									v-model="signature"></textarea>
+							</div>
+						</div>
+						<div class="media-right">
+							<button type="submit" class="button" :disabled="signatureUnLoaded">修改</button>
+						</div>
+					</div>
+				</div>
+			</form>
+		</div>
+	</section>
+</template>
+
+<script>
+import ComponentAvatarCrop from '@/components/setting/avatar_crop.vue'
+
+export default {
+	name: 'SettingProfile',
+	data () {
+		return {
+			userAvatar: '',
+			signature: '',
+			cropped: null,
+			cropResultIsActive: false,
+			cropResult: null,
+			signatureUnLoaded: true
+		}
+	},
+	mounted () {
+		if (localStorage.getItem('token') !== null && localStorage.getItem('userid') !== null) {
+			this.userId = localStorage.getItem('userid')
+			this.userName = localStorage.getItem('username')
+			this.userAvatar = this.GLOBAL.api + '/avatar/' + localStorage.getItem('userid') + '/2'
+		}
+		this.$http.get( '/matrix/user-profile/' + this.userId )
+			.then((response) => {
+				console.log(response.data)
+				this.signature = response.data.result.bio
+				this.signatureUnLoaded = false
+			})
+			.catch(function (error) {
+				console.log(error)
+			})
+	},
+	methods: {
+		avatar_picker () {
+			this.$modal.show(ComponentAvatarCrop, {
+			}, {
+				name: 'modalAvatarPicker',
+				classes: 'modal-avatar-picker',
+				draggable: false,
+				width: '100%',
+				height: '100%',
+				clickToClose: false
+			})
+		},
+		post_signature (e) {
+			let Form = e.path[0]
+			let formData = new FormData()
+			// let formData = new URLSearchParams()
+			let param = Form.querySelector('textarea').value
+			formData.append('signature', param)
+			this.$utils.settingSubmit(Form, formData)
+		}
+	}
+}
+</script>

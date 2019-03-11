@@ -1,0 +1,352 @@
+<template>
+<main class="draft">
+	<form>
+		<div class="field editor-section">
+			<h1 id="editor_title" class="title is-2" contenteditable="true" v-text="subject" ></h1>
+			<div id="editor_content"
+				@blur="onEditorBlur($event)"
+				@focus="onEditorFocus($event)"
+				></div>
+			<tags-input element-id="tags"
+				v-model="selectedTags"
+				:existing-tags="{
+					'lab': 'Lab',
+					'vue': 'Vue',
+					'php': 'PHP',
+					'javascript': 'JavaScript',
+					'design': 'Design'
+				}"
+				:placeholder="placeholder"
+				:typeahead="true"></tags-input>
+		</div>
+	</form>
+</main>
+</template>
+
+<script>
+// eslint-disable-next-line
+import Vue from 'vue'
+import VoerroTagsInput from '@voerro/vue-tagsinput'
+
+Vue.component('tags-input', VoerroTagsInput)
+
+export default {
+	name: 'Draft',
+	data () {
+		return {
+			subject: '',
+			content: '',
+			newTag: ['Jerry', 'Kramer', 'Elaine', 'George'],
+			editorFocus: false,
+			editorFocused: false,
+			toolbarStyle: {
+				top: '0',
+				visibility: ''
+			},
+			posPath: ['Kramer'],
+			selectedTags: '',
+			placeholder: '添加标签'
+		}
+	},
+	components: {
+		'remote-js': {
+			render (createElement) {
+				var __self = this
+				return createElement('script', {
+					attrs: {
+						type: 'text/javascript',
+						src: this.src
+					},
+					on: {
+						load: function (event) {
+							__self.$emit('load', event)
+
+							class UploadAdapter {
+								constructor (loader) {
+									this.loader = loader
+								}
+
+								upload () {
+									const data = new FormData()
+
+									data.append('Filedata', this.loader.file)
+
+									return new Promise((resolve, reject) => {
+										__self.$http.post('/upload/photo', data, {
+											headers: { 'Content-Type': 'multipart/form-data' },
+											timeout: 20000,
+											onUploadProgress: progressEvent => {
+												if (progressEvent.lengthComputable) {
+													this.loader.uploadTotal = progressEvent.total
+													this.loader.uploaded = progressEvent.uploaded
+													let ratio = progressEvent.loaded / progressEvent.total * 100
+													console.log(ratio)
+												}
+											}
+										}).then((response) => {
+											console.log(response.data)
+											if (response.data.success) {
+												resolve({
+													default: response.data.image,
+													imageid: response.data.imageid
+												})
+											}
+										}).catch(function (error) {
+											console.log(error)
+										})
+									})
+								}
+
+								abort () {
+								}
+							}
+
+							// eslint-disable-next-line
+							BalloonEditor
+								.create(document.querySelector('#editor_content'), {
+								})
+								.then(editor => {
+									editor.model.schema.extend('image', {allowAttributes: ['imageid']})
+									editor.plugins.get('FileRepository').createUploadAdapter = function (loader) {
+										return new UploadAdapter(loader)
+									}
+
+									const model = editor.model
+									const doc = editor.model.document
+
+									doc.on('change:data', () => {
+										const changes = doc.differ.getChanges()
+										model.change(writer => {
+											for (const entry of changes) {
+												if (entry.type === 'attribute' && entry.attributeKey === 'src') {
+													console.log(entry)
+													// let src = entry.attributeNewValue.split('?imageid=')
+													// console.log(document.querySelector('img[src='+src[0]+']'))
+													// document.querySelector('img[src=\"'+src[0]+'\"]').dataset.imageid = src[1]
+												}
+
+												if (entry.type === 'insert' && entry.name === 'image') {
+													const image = entry.position.nodeAfter
+													const paragraph = writer.createElement('paragraph')
+													writer.insert(paragraph, image, 'after') // 图片上传后插入空白P元素
+												}
+											}
+										})
+									})
+
+									__self.$bus.on('handleDraftPublish', () => { // bus事件，控制头部发布按钮
+										document.querySelector('header.navbar .link-draft').classList.add('is-loading')
+
+										__self.$http.post('/publish',
+											{
+												subject: document.querySelector('#editor_title').innerHTML,
+												content: editor.getData(),
+												tags: document.querySelector('#tags').value
+											})
+											.then((response) => {
+												if (!response.data.success) {
+													__self.GLOBAL.notice(response.data.info)
+													document.querySelector('header.navbar .link-draft').classList.remove('is-loading')
+													return false
+												}
+
+												__self.GLOBAL.notice('发表成功，即将跳转文章页面')
+												// eslint-disable-next-line
+												return
+												// eslint-disable-next-line
+												setTimeout(() => {
+													__self.$router.push({path: '/article/' + response.data.article_id})
+												}, 2000)
+											})
+											.catch(function (error) {
+												document.querySelector('header.navbar .link-draft').classList.remove('is-loading')
+												console.log(error)
+											})
+									})
+								})
+						},
+						error: function (event) {
+							__self.$emit('error', event)
+						},
+						readystatechange: function (event) {
+							if (this.readyState === 'complete') {
+								__self.$emit('load', event)
+							}
+						}
+					}
+				})
+			},
+			props: {
+				src: {type: String, required: true}
+			}
+		}
+	},
+	props: {
+		tags: {
+			type: Array,
+			default: () => []
+		},
+		onChange: {
+			type: Function
+		},
+		readOnly: {
+			type: Boolean,
+			default: false
+		},
+		validate: {
+			type: String,
+			default: ''
+		}
+	},
+	beforeMount () {
+		document.title = '草稿: 撰写中...'
+		this.$bus.emit('handleNavbarShowBtnDraft', 'hide')
+		this.$bus.emit('handleNavbarShowBtnPublish', 'show')
+	},
+	beforeDestroy () {
+		this.$bus.emit('handleNavbarShowBtnDraft', 'show')
+		this.$bus.emit('handleNavbarShowBtnPublish', 'hide')
+		let styleList = document.querySelectorAll('style')
+		let lastStyle = styleList[styleList.length - 1]
+		let ckTemp = document.querySelector('.ck-body')
+		ckTemp.parentNode.removeChild(ckTemp)
+		document.querySelector('head').removeChild(lastStyle)
+		global.BalloonEditor = undefined
+		global.CKEDITOR_TRANSLATIONS = undefined
+		global.CKEDITOR_VERSION = undefined
+	},
+	mounted () {
+		let __self = this
+		// let __id = this.$utils.getUrlKey('edit')
+		let __id = ''
+
+		let init = function () {
+			document.querySelector('#editor_title').addEventListener('paste', function (e) {
+				e.preventDefault()
+				if (e.clipboardData && e.clipboardData.getData) {
+					let text = e.clipboardData.getData('text/plain')
+					text = text.replace(/"([^"]*)"/g, '“$1”')
+					console.log(text)
+					document.execCommand('insertText', false, text)
+				} else if (window.clipboardData && window.clipboardData.getData) {
+					// let text = window.clipboardData.getData('Text')
+					// insertTextAtCursor(text)
+				}
+			})
+
+			document.querySelector('#editor_title').addEventListener('drop', function (e) {
+				e.preventDefault()
+			})
+
+			document.querySelector('#editor_title').addEventListener('keydown', function (e) {
+				if (e.keyCode === 13) { // 回车事件
+					e.preventDefault()
+				}
+			})
+		}
+
+		if (__id) {
+			if ((/(^[1-9]\d*$)/.test(__id))) {
+				__self.$axios.get('/matrix/article-' + __id)
+					.then((response) => {
+						console.log(response)
+						if (__self.GLOBAL.uid === response.data.result.authorid) {
+							document.title = '编辑状态'
+							__self.subject = response.data.result.subject
+							__self.content = response.data.result.content
+							if (response.data.result.tags) {
+								console.log(response.data.result.tags.split(','))
+								// __self.tags = response.data.result.tags.split(',')
+							}
+							let figcaption = document.querySelectorAll('figcaption')
+							if (figcaption.length) {
+								for (let i = 0; i < figcaption.length; i++) {
+									figcaption[i].setAttribute('contenteditable', true)
+								}
+							}
+							return true
+						}
+						return false
+					})
+					.catch((error) => {
+						console.log(error)
+						return false
+					})
+			}
+		}
+		init()
+
+		let ning = function () {
+			var Editor = document.querySelector('#editor_content')
+			Editor.setAttribute('contenteditable', true)
+
+			var lastEditRange
+			Editor.onclick = function () {
+				// 获取选定对象
+				let selection = getSelection()
+				// 设置最后光标对象
+				lastEditRange = selection.getRangeAt(0)
+			}
+
+			Editor.onkeyup = function () {
+				// 获取选定对象
+				let selection = getSelection()
+				// 设置最后光标对象
+				lastEditRange = selection.getRangeAt(0)
+				console.log(lastEditRange)
+			}
+
+			console.log(Editor)
+		}
+
+		ning()
+	},
+	methods: {
+		onEditorBlur () {
+		},
+		onEditorFocus () {
+			this.editorFocus = true
+			if (!this.editorFocused) {
+				this.editorFocused = true
+			}
+		},
+		focusNewTag () {
+			if (this.readOnly) {
+				return
+			}
+			this.$el.querySelector('.new-tag').focus()
+		},
+		addNew (tag) {
+			if (tag && this.tags.indexOf(tag) === -1 && this.validateIfNeeded(tag)) {
+				this.tags.push(tag)
+				this.tagChange()
+			}
+			this.newTag = ''
+		},
+		validateIfNeeded (tagValue) {
+			// if (this.validate === '' || this.validate === undefined) {
+			// 	return true
+			// } else if (Object.keys(validators).indexOf(this.validate) > -1) {
+			// 	return validators[this.validate].test(tagValue)
+			// }
+			return true
+		},
+		remove (index) {
+			this.tags.splice(index, 1)
+			this.tagChange()
+		},
+		removeLastTag () {
+			if (this.newTag) {
+				return
+			}
+			this.tags.pop()
+			this.tagChange()
+		},
+		tagChange () {
+			if (this.onChange) {
+				this.onChange(JSON.parse(JSON.stringify(this.tags)))
+			}
+		}
+	}
+}
+</script>
