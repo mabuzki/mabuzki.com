@@ -33,6 +33,10 @@
 		</div>
 
 		<div class="field has-text-centered">
+			<a class="button is-medium is-fullwidth" :class="{'is-disabled': isDisabled}" @click="swtichModalRegister">注册</a>
+		</div>
+
+		<div class="field has-text-centered">
 			<a class="btn btn-link">
 				<small>找回密码</small>
 			</a>
@@ -55,12 +59,16 @@ export default {
 		return {
 			email: '',
 			password: '',
-			isLoading: false
+			isLoading: false,
+			isDisabled: false
 		}
 	},
 	methods: {
 		hideModalLogin () {
 			this.$modal.hide('modalLogin')
+		},
+		swtichModalRegister () {
+			this.$bus.emit('swtichModalRegister')
 		},
 		validateBeforeSubmit () {
 			this.$validator.validateAll().then((result) => {

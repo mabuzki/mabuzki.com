@@ -2,12 +2,43 @@
 <header class="navbar">
 	<div id="specialShadow" class="bd-special-shadow"></div>
 	<div class="container">
-		<div class="navbar-brand">
-			<router-link class="navbar-item"  to="/">抹布斯基</router-link>
+		<div class="navbar-brand is-hidden-desktop">
+			<router-link class="navbar-item link-user" :to="{name:'u', params: {uid: userId}}" v-if="userId">
+				<img v-bind:src="userAvatar" class="image is-28x28 avatar">
+			</router-link>
+			
+			<router-link class="navbar-item"  to="/">首页</router-link>
 
-			<a class="navbar-item is-hidden-desktop" href="/hire-me" target="_blank">Hire Me</a>
+			<router-link class="navbar-item"  to="/hire-me">Hire Me</router-link>
 
-			<div id="navbarBurger" class="navbar-burger burger" data-target="navMenu">
+			<div class="tablet-btn" v-if="userId">
+				<div class="navbar-item" v-if="navbarShowBtnDraft">
+					<router-link class="button is-link link-draft" to="/draft">
+						<span class="icon">
+							<i class="iconfont">&#xe603;</i>
+						</span>
+						<span>新文章</span>
+					</router-link>
+				</div>
+
+				<div class="navbar-item is-hoverable" v-if="navbarShowBtnPublish">
+					<a class="button is-link link-draft"
+						@click="handleBtnPublish()"
+						:class="{'is-loading': BtnPublishisLoading}">
+						<span class="icon">
+							<i class="iconfont">&#xe61d;</i>
+						</span>
+						<span>立即发布</span>
+					</a>
+				</div>
+			</div>
+			
+
+			<div id="navbarBurger"
+				class="navbar-burger burger"
+				data-target="navMenu"
+				@click="handleModalLoginOpen()"
+				v-else>
 				<span></span>
 				<span></span>
 				<span></span>
@@ -126,6 +157,7 @@
 import ComponentLogin from '@/components/auth/login.vue'
 import ComponentRegister from '@/components/auth/register.vue'
 import ComponentLogout from '@/components/auth/logout.vue'
+import ComponentNavList from '@/components/layout/NavList.vue'
 
 export default {
 	data () {
@@ -190,6 +222,10 @@ export default {
 				height: 'auto',
 				clickToClose: false
 			})
+			localStorage.setItem('userid', '')
+			localStorage.setItem('username', '')
+			localStorage.setItem('token', '')
+			this.userId = ''
 		})
 
 		this.$bus.on('handleModalLoginClose', () => {
@@ -198,14 +234,57 @@ export default {
 				__self.$modal.hide('modalLogin')
 			}, 1500)
 		})
+
+		this.$bus.on('swtichModalRegister', () => {//登录页面转入注册并关闭后层LoginModal
+			this.handleModalRegisterOpen()
+			setTimeout(() => {
+				this.$modal.hide('modalLogin')
+			}, 300)
+		})
+
+		this.$bus.on('changeUserStatus', (data) => {//控制用户状态
+			console.log(data)
+			localStorage.setItem('userid', data.userid)
+			localStorage.setItem('username', data.username)
+			localStorage.setItem('token', data.token)
+
+			if (localStorage.getItem('token') !== null) {
+				this.GLOBAL.uid = data.userid
+				this.GLOBAL.username = data.username
+				this.GLOBAL.token = data.token
+
+				this.$http.defaults.headers.common['Authorization'] = 'Bearer ' + data.token
+				this.$bus.emit('handleNavbarLoginStatus', 'signed')
+			}
+
+			if (data.origin == 'register') {
+				setTimeout(() => {
+					this.$modal.hide('modalRegister')
+				}, 1500)
+			} else {
+				this.$bus.emit('handleModalLoginClose')
+			}
+		})
 	},
 	methods: {
-		handleModalLoginOpen () {
+		handleModalLoginOpen () {//弹出modal login页面
 			this.$modal.show(ComponentLogin, {
 				text: ''
 			}, {
 				name: 'modalLogin',
 				classes: 'modal-login',
+				draggable: false,
+				adaptive: true,
+				height: 'auto',
+				clickToClose: false
+			})
+		},
+		handleModalNavListOpen () {//弹出modal 快捷导航
+			this.$modal.show(ComponentNavList, {
+				text: ''
+			}, {
+				name: 'modalNavList',
+				classes: 'modal-nav-list',
 				draggable: false,
 				adaptive: true,
 				height: 'auto',

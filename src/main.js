@@ -7,6 +7,7 @@ import router from './router'
 import utils from './utils'
 import global_ from './components/global'
 import axios from 'axios'
+import QS from 'qs'
 import VueBus from 'vue-bus'
 import VModal from 'vue-js-modal'
 import lazysizes from 'lazysizes'
@@ -16,8 +17,6 @@ import './assets/iconfont/iconfont.css'
 import './sass/app.scss'
 
 window.Vue = Vue
-
-console.log(process.env)
 
 Vue.prototype.GLOBAL = global_
 Vue.use(VueBus)
@@ -34,12 +33,15 @@ Vue.use(Toasted, {
 Vue.config.productionTip = false
 axios.defaults.timeout = 10000
 axios.defaults.baseURL = global_.api
-axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded'
+axios.defaults.headers['Content-Type'] = 'application/x-www-form-urlencoded'
+// axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded'
+// delete axios.defaults.headers.common["X-CSRF-TOKEN"]
 axios.defaults.headers.common['Authorization'] = 'Bearer ' + localStorage.getItem('token')
 
 axios.interceptors.request.use((config) => {
+	config.data = QS.stringify(config.data)
 	if (!localStorage.getItem('token') && config.method === 'post') {
-		config.headers.Authorization = ''
+		delete config.headers.common["Authorization"]
 	}
 	return config
 }, (error) => {
@@ -72,7 +74,6 @@ Vue.prototype.$http = axios
 Vue.prototype.$utils = utils
 
 router.beforeEach((to, from, next) => {
-	console.log('test')
 	if (!localStorage.getItem('token') && !localStorage.getItem('userid')) {
 		if (to.path === '/setting/account' || to.path === '/setting/profile' || to.path === '/draft') {
 			next({path: '/login'})

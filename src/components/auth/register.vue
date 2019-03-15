@@ -163,8 +163,12 @@ export default {
 								console.log(o)
 								console.log(response.data.info[o])
 							}
-							this.GLOBAL.notice('注册失败')
+							this.$toasted.show('注册失败')
 							return false
+						} else {
+							response.data.origin = 'register'
+							this.$toasted.show('注册成功，正在引导登入')
+							this.$bus.emit('changeUserStatus', response.data)//控制用户状态 pos:header.vue
 						}
 					}).catch(function (error) {
 						this.isLoading = false

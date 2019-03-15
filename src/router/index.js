@@ -57,6 +57,10 @@ export default new Router({
 			path: '/draft',
 			component: resolve => require(['@/components/page/draft.vue'], resolve)
 		},
+		{
+			path: '/changelog',
+			component: resolve => require(['@/components/page/changelog.vue'], resolve)
+		},
 		{ path: '*', component: { template: '<div>404</div>' } }
 	]
 })
