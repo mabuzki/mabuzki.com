@@ -88,12 +88,26 @@ export default {
 			})
 		},
 		post_signature (e) {
-			let Form = e.path[0]
-			let formData = new FormData()
+			// let Form = e.path[0]
+			// let formData = new FormData()
 			// let formData = new URLSearchParams()
-			let param = Form.querySelector('textarea').value
-			formData.append('signature', param)
-			this.$utils.settingSubmit(Form, formData)
+			// let param = Form.querySelector('textarea').value
+			// formData.append('signature', param)
+			console.log(this.signature)
+
+			this.$http.post('/setting/profile/update',{
+				signature: this.signature
+			})
+			.then((response) => {
+				console.log(response.data);
+			})
+			.catch(function (error) {
+				console.log(error);
+			});
+
+			// this.$utils.settingSubmit(Form, {
+			// 	signature: this.signature
+			// })
 		}
 	}
 }

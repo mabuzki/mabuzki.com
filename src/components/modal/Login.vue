@@ -21,14 +21,14 @@
 								<form method="POST" @submit.prevent="validateBeforeSubmit">
 									<div class="field username">
 										<div class="control has-icons-left has-icons-right">
-											<input name="username" :class="{'input': true }" type="text" placeholder="昵称" autofocus>
+											<input name="username" :class="{'input': true }" type="text" placeholder="昵称" autofocus tabindex="1">
 											<span class="icon is-small is-left"><i class="fa fa-user"></i></span>
 										</div>
 									</div>
 
 									<div class="field password">
 										<div class="control has-icons-left has-icons-right">
-											<input name="password" :class="{'input': true }" type="password" placeholder="密码">
+											<input name="password" :class="{'input': true }" type="password" placeholder="密码" tabindex="2">
 											<span class="icon is-small is-left"><i class="fa fa-lock"></i></span>
 										</div>
 									</div>
@@ -39,7 +39,7 @@
 
 									<div class="field">
 										<input type="hidden" name="remember" checked>
-										<button type="submit" class="ui blue button">登录</button>
+										<button type="submit" class="ui blue button" tabindex="3">登录</button>
 									</div>
 
 									<div class="ui error message">
@@ -87,7 +87,7 @@ export default {
 			}
 			console.log(data);
 
-			this.$http.post('/login',data)
+			this.$http.post('/setting/profile/update',data)
 			.then((response) => {
 				console.log(response.data);
 			})

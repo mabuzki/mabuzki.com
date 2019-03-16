@@ -23,6 +23,7 @@ module.exports = {
 			config.plugins.push(
 				new CompressionWebpackPlugin({
 					// asset: '[path].gz[query]',
+					filename: '[path].gz[query]',
 					algorithm: 'gzip',
 					test: new RegExp('\\.(' + productionGzipExtensions.join('|') + ')$'),
 					threshold: 10240,

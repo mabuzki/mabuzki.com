@@ -7,7 +7,7 @@ import router from './router'
 import utils from './utils'
 import global_ from './components/global'
 import axios from 'axios'
-import QS from 'qs'
+// import QS from 'qs'
 import VueBus from 'vue-bus'
 import VModal from 'vue-js-modal'
 import lazysizes from 'lazysizes'
@@ -33,26 +33,41 @@ Vue.use(Toasted, {
 Vue.config.productionTip = false
 axios.defaults.timeout = 10000
 axios.defaults.baseURL = global_.api
-axios.defaults.headers['Content-Type'] = 'application/x-www-form-urlencoded'
-// axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded'
-// delete axios.defaults.headers.common["X-CSRF-TOKEN"]
-axios.defaults.headers.common['Authorization'] = 'Bearer ' + localStorage.getItem('token')
+axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded'
 
 axios.interceptors.request.use((config) => {
-	config.data = QS.stringify(config.data)
-	if (!localStorage.getItem('token') && config.method === 'post') {
-		delete config.headers.common["Authorization"]
+	// delete config.headers.Authorization
+	// if (config.url.indexOf('login')) {
+	// 	delete config.headers.common['Authorization']
+	// 	localStorage.setItem('token', '')
+	// }
+	// console.log(localStorage.getItem('token'))
+	// console.log(config)
+	if (localStorage.getItem('token') && config.method === 'post') {
+		config.headers.common['Authorization'] = 'Bearer ' + localStorage.getItem('token')
+		config.data = JSON.stringify(config.data)
 	}
+
+	// if (!localStorage.getItem('token')) {
+	// 	delete config.headers.common["Authorization"]
+	// }
 	return config
 }, (error) => {
+	console.log('error:'+error)
 	return Promise.reject(error)
 })
 
 axios.interceptors.response.use((response) => {
 	if(!response.data.success) {
 		if(response.data.needlogin && response.request.responseURL.indexOf('logout') == -1) {//需要重新登录并且不是退出post
-			Vue.prototype.$toasted.show('需要重新登录')
-			Vue.prototype.$bus.emit('handleModalLoginOpen')//开启登录modal
+			// Vue.prototype.$http.post('/auth/refresh')
+			// 	.then((response) => {
+			// 		console.log(response);
+			// 	}).catch ((error) => {
+			// 		console.log(error)
+			// 	})
+			// Vue.prototype.$toasted.show('需要重新登录')
+			// Vue.prototype.$bus.emit('handleModalLoginOpen')//开启登录modal
 		}
 	}
 	return response

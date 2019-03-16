@@ -7,7 +7,11 @@ a.navbar-item:hover, a.navbar-item.is-active, a.navbar-link:hover, a.navbar-link
 .navbar-start .navbar-item:hover::after { bottom: 0; opacity: 1; transition: .15s all ease-in-out; }
 .navbar-item img { max-height: inherit!important; }
 .navbar-start .navbar-item.has-dropdown::after { display: none; }
+
+header.navbar .navbar-brand {
+	position: relative;
+}
 header.navbar .navbar-brand .tablet-btn {
-	position: fixed;
+	position: absolute;
 	right: 0;
 }

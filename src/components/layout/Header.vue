@@ -121,7 +121,7 @@
 						<span>立即发布</span>
 					</a>
 
-					<div class="navbar-dropdown">
+					<!-- <div class="navbar-dropdown">
 						<a class="navbar-item" >私密发布</a>
 						<a class="navbar-item" >保存草稿</a>
 						<hr class="navbar-divider">
@@ -135,7 +135,7 @@
 								</small>
 							</div>
 						</div>
-					</div>
+					</div> -->
 				</div>
 
 			</div>
@@ -265,6 +265,8 @@ export default {
 				this.$bus.emit('handleModalLoginClose')
 			}
 		})
+	},
+	beforeDestroy() {
 	},
 	methods: {
 		handleModalLoginOpen () {//弹出modal login页面

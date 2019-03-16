@@ -182,6 +182,9 @@ export default {
 
 		init()
 	},
+	destroyed() {
+		this.$bus.off('handleDraftPublish')
+	},
 	methods: {
 		subjectInput (e) {
 			// if(e.data === '"') {
