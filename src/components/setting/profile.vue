@@ -35,7 +35,7 @@
 							</div>
 						</div>
 						<div class="media-right">
-							<button type="submit" class="button" :disabled="signatureUnLoaded">修改</button>
+							<button type="submit" class="button" :class="{'is-loading': isLoading}" :disabled="signatureUnLoaded">修改</button>
 						</div>
 					</div>
 				</div>
@@ -56,7 +56,8 @@ export default {
 			cropped: null,
 			cropResultIsActive: false,
 			cropResult: null,
-			signatureUnLoaded: true
+			signatureUnLoaded: true,
+			isLoading: false,
 		}
 	},
 	mounted () {
@@ -88,26 +89,16 @@ export default {
 			})
 		},
 		post_signature (e) {
-			// let Form = e.path[0]
-			// let formData = new FormData()
-			// let formData = new URLSearchParams()
-			// let param = Form.querySelector('textarea').value
-			// formData.append('signature', param)
-			console.log(this.signature)
-
-			this.$http.post('/setting/profile/update',{
+			this.isLoading = true
+			this.$http.post('/setting/profile/update', {
 				signature: this.signature
 			})
 			.then((response) => {
-				console.log(response.data);
+				this.isLoading = false
 			})
 			.catch(function (error) {
-				console.log(error);
-			});
-
-			// this.$utils.settingSubmit(Form, {
-			// 	signature: this.signature
-			// })
+				console.log(error)
+			})
 		}
 	}
 }

@@ -31,21 +31,21 @@
 
 			<a class="button" @click="rechoose()">
 				<span class="icon">
-					<i class="fa fa-chevron-left"></i>
+					<i class="iconfont has-text-dark">&#xe672;</i>
 				</span>
 				<span>重新选择</span>
 			</a>
 
 			<a class="button" @click="rotate(-90)">
 				<span class="icon is-small">
-					<i class="fa fa-rotate-right"></i>
+					<i class="iconfont has-text-dark">&#xe600;</i>
 				</span>
 				<span>旋转</span>
 			</a>
 
 			<a class="button" @click="next()">
 				<span class="icon">
-					<i class="fa fa-crop"></i>
+					<i class="iconfont has-text-dark">&#xe696;</i>
 				</span>
 				<span>裁切</span>
 			</a>
@@ -57,13 +57,13 @@
 
 			<a class="button" @click="prev()">
 				<span class="icon">
-					<i class="fa fa-chevron-left"></i>
+					<i class="iconfont has-text-dark">&#xe672;</i>
 				</span>
 				<span>上一步</span>
 			</a>
 			<a class="button" @click="upload()" v-bind:class="{ 'is-loading': cropUploadIsActive }">
 				<span class="icon">
-					<i class="fa fa-check"></i>
+					<i class="iconfont has-text-dark">&#xe660;</i>
 				</span>
 				<span>保存</span>
 			</a>

@@ -229,15 +229,20 @@ export default {
 		},
 		loadCkeditorJs () {//eslint-disable-line
 			// 当使用远程js里的内容时请添加"//eslint-disable-line"防止eslint检测报错
-			let __self = this
+			var __self = this
+			var __file
 			class UploadAdapter {
 				constructor (loader) {
 					this.loader = loader
+					let tmp = Promise.resolve(loader.file) //从object promise里面读出file
+					tmp.then(function (result) {
+						__file = result
+					})
 				}
 
 				upload () {
 					const data = new FormData()
-					data.append('Filedata', this.loader.file)
+					data.append('Filedata', __file)
 					return new Promise((resolve, reject) => {//eslint-disable-line
 						__self.$http.post('/upload/photo', data, {
 							headers: { 'Content-Type': 'multipart/form-data' },
@@ -247,11 +252,9 @@ export default {
 									this.loader.uploadTotal = progressEvent.total
 									this.loader.uploaded = progressEvent.uploaded
 									let ratio = progressEvent.loaded / progressEvent.total * 100
-									console.log(ratio)
 								}
 							}
 						}).then((response) => {
-							console.log(response.data)
 							if (response.data.success) {
 								resolve({
 									default: response.data.image,
@@ -313,12 +316,11 @@ export default {
 				})
 				.then((response) => {
 					if (!response.data.success) {
-						this.$toasted.show(response.data.info)
 						document.querySelector('header.navbar .link-draft').classList.remove('is-loading')
 						return false
 					}
 
-					this.$toasted.show('发表成功，即将跳转文章页面')
+					// this.$toasted.show('发表成功，即将跳转文章页面')
 					// eslint-disable-next-line
 					return
 					// eslint-disable-next-line

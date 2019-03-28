@@ -15,3 +15,32 @@ header.navbar .navbar-brand .tablet-btn {
 	position: absolute;
 	right: 0;
 }
+
+header.navbar .link-user-avatar {
+	position: relative;
+}
+
+header.navbar .link-user-avatar::before {
+	content: "";
+	width: 36px;
+	height: 36px;
+	border-radius: 50rem;
+	background: #F2F2F2;
+}
+header.navbar .link-user-avatar img {
+	position: absolute;
+	z-index: 2;
+}
+
+// .navbar.is-black .navbar-brand a , .navbar.is-black .navbar-start a {
+// 	text-shadow: 0 0 5px rgba(0, 0, 0, .5);
+// }
+
+.navbar.is-black .link-draft {
+	background-color: #FFF;
+	color: #363636
+}
+.navbar.is-transparent { background: none; }
+#site-main.page-index {
+	position: relative;
+}

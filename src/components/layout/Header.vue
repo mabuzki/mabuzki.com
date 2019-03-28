@@ -3,17 +3,16 @@
 	<div id="specialShadow" class="bd-special-shadow"></div>
 	<div class="container">
 		<div class="navbar-brand is-hidden-desktop">
-			<router-link class="navbar-item link-user" :to="{name:'u', params: {uid: userId}}" v-if="userId">
+			<router-link class="navbar-item link-user-avatar" :to="{name:'u', params: {uid: userId}}" v-if="userId">
 				<img v-bind:src="userAvatar" class="image is-28x28 avatar">
 			</router-link>
-			
-			<router-link class="navbar-item"  to="/">首页</router-link>
 
+			<router-link class="navbar-item"  to="/">首页</router-link>
 			<router-link class="navbar-item"  to="/hire-me">Hire Me</router-link>
 
 			<div class="tablet-btn" v-if="userId">
 				<div class="navbar-item" v-if="navbarShowBtnDraft">
-					<router-link class="button is-link link-draft" to="/draft">
+					<router-link class="button is-link link-draft is-rounded" to="/draft">
 						<span class="icon">
 							<i class="iconfont">&#xe603;</i>
 						</span>
@@ -22,7 +21,7 @@
 				</div>
 
 				<div class="navbar-item is-hoverable" v-if="navbarShowBtnPublish">
-					<a class="button is-link link-draft"
+					<a class="button is-link link-draft is-rounded"
 						@click="handleBtnPublish()"
 						:class="{'is-loading': BtnPublishisLoading}">
 						<span class="icon">
@@ -47,23 +46,8 @@
 
 		<div id="navMenu" class="navbar-menu">
 			<div class="navbar-start">
-
 				<router-link class="navbar-item"  to="/">首页</router-link>
-
-				<!-- <div class="navbar-item has-dropdown is-hoverable">
-					<router-link class="navbar-item link-lab" to="/tag">Tag</router-link>
-					<div class="navbar-dropdown">
-						<router-link class="navbar-item link-lab"  to="/lab">
-							<span class="icon"><i class="iconfont">&#xe738;</i></span> vue
-						</router-link>
-						<router-link class="navbar-item link-lab"  to="/lab">
-							<span class="icon"><i class="iconfont">&#xe738;</i></span> lab
-						</router-link>
-					</div>
-				</div> -->
-
 				<router-link class="navbar-item"  to="/hire-me">Hire Me</router-link>
-
 			</div>
 
 			<div class="navbar-end" v-if="userId">
@@ -103,7 +87,7 @@
 				</div>
 
 				<div class="navbar-item" v-if="navbarShowBtnDraft">
-					<router-link class="button is-link link-draft" to="/draft">
+					<router-link class="button is-link link-draft is-rounded" to="/draft">
 						<span class="icon">
 							<i class="iconfont">&#xe603;</i>
 						</span>
@@ -112,7 +96,7 @@
 				</div>
 
 				<div class="navbar-item is-hoverable" v-if="navbarShowBtnPublish">
-					<a class="button is-link link-draft"
+					<a class="button is-link link-draft is-rounded"
 						@click="handleBtnPublish()"
 						:class="{'is-loading': BtnPublishisLoading}">
 						<span class="icon">
@@ -162,11 +146,11 @@ import ComponentNavList from '@/components/layout/NavList.vue'
 export default {
 	data () {
 		return {
-			userName: '',
-			userId: '',
+			userName: this.$store.state.userinfo.name,
+			userId: this.$store.state.userinfo.id,
 			navbarShowBtnDraft: true,
 			navbarShowBtnPublish: false,
-			userAvatar: '',
+			userAvatar: this.GLOBAL.avatar + this.$store.state.userinfo.id + '/0',
 			BtnPublishisLoading: false
 		}
 	},
@@ -174,12 +158,33 @@ export default {
 		// localStorage.setItem('userid', '')
 		// localStorage.setItem('username', '')
 		// localStorage.setItem('token', '')
-		console.log(this)
-
-		if (localStorage.getItem('token') !== null && localStorage.getItem('userid') !== null) {
-			this.userId = localStorage.getItem('userid')
-			this.userName = localStorage.getItem('username')
-			this.userAvatar = this.GLOBAL.avatar + localStorage.getItem('userid') + '/0'
+		// if (this.$store.state.token && this.$store.state.userid) {
+		// 	this.userId = this.$store.state.userid
+		// 	this.userName = this.$store.state.username
+		// 	this.userAvatar = this.GLOBAL.avatar + this.$store.state.userid + '/0'
+		// }
+	},
+	computed: {
+		userStatus() {
+			let userinfo = {
+				id: this.$store.state.userinfo.id,
+				name: this.$store.state.userinfo.name,
+				token: this.$store.state.userinfo.token
+			}
+			return userinfo
+		}
+	},
+	watch: {
+		userStatus: function (_new) {
+			if (_new.id) {
+				this.userId = _new.id
+				this.userName = _new.name
+				this.userAvatar = this.GLOBAL.api + '/avatar/' + _new.id + '/0'
+			} else {
+				this.userId = null
+				this.userName = null
+				this.userAvatar = null
+			}
 		}
 	},
 	mounted () {
@@ -198,15 +203,13 @@ export default {
 			}
 		})
 
-		this.$bus.on('handleNavbarLoginStatus', (action) => {
+		this.$bus.on('handleNavbarLoginStatus', (action) => { // 注册call
 			if (action === 'signed') {
 				this.userId = localStorage.getItem('userid')
 				this.userName = localStorage.getItem('username')
 				this.userAvatar = this.GLOBAL.api + '/avatar/' + localStorage.getItem('userid') + '/0'
 			} else {
-				localStorage.setItem('userid', '')
-				localStorage.setItem('username', '')
-				localStorage.setItem('token', '')
+				this.$store.commit('clearUser')
 				this.userId = ''
 			}
 		})
@@ -222,10 +225,11 @@ export default {
 				height: 'auto',
 				clickToClose: false
 			})
-			localStorage.setItem('userid', '')
-			localStorage.setItem('username', '')
-			localStorage.setItem('token', '')
-			this.userId = ''
+			this.$store.commit('clearUser')//清空用户数据
+		})
+
+		this.$bus.on('handleModalLogoutOpen', () => {
+			this.handleModalLogoutOpen ()
 		})
 
 		this.$bus.on('handleModalLoginClose', () => {
@@ -242,13 +246,12 @@ export default {
 			}, 300)
 		})
 
-		this.$bus.on('changeUserStatus', (data) => {//控制用户状态
-			console.log(data)
+		this.$bus.on('changeUserStatus', (data) => {//注册成功后控制用户状态
 			localStorage.setItem('userid', data.userid)
 			localStorage.setItem('username', data.username)
 			localStorage.setItem('token', data.token)
 
-			if (localStorage.getItem('token') !== null) {
+			if (localStorage.getItem('token')) {
 				this.GLOBAL.uid = data.userid
 				this.GLOBAL.username = data.username
 				this.GLOBAL.token = data.token

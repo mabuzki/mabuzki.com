@@ -24,29 +24,30 @@ export default {
 		hideModalLogout () {
 			this.$modal.hide('modalLogout')
 		},
-		handleLogout (msg) {
-			this.$bus.emit('handleNavbarLoginStatus', 'logout')
-			if (msg) this.$toasted.show(msg)
-			this.isLoading = false
-			this.$modal.hide('modalLogout')
-			if (this.$route.path !== '/') {
-				this.$router.push({path: '/'})
-			}
+		handleLogout () {
+			this.$store.commit('clearUser')
+			this.$toasted.show('再见，等你回来')
+			setTimeout(() => {
+				this.isLoading = false
+				this.$modal.hide('modalLogout')
+				if (this.$route.path !== '/') {
+					this.$router.push({path: '/'})
+				}
+			}, 1500)
 		},
 		hideUserLogout () {
 			let __self = this
-			__self.isLoading = true
+			this.isLoading = true
 			this.$http.post('/auth/logout')
 				.then((response) => {
 					if (response.data.success) {
-						__self.handleLogout(response.data.info)
-						return
+						return this.handleLogout(response.data.info)
 					}
-					__self.handleLogout()
 				})
 				.catch(function (error) {
-					__self.handleLogout(error.message)
+					console.log(error)
 				})
+			this.handleLogout()
 		}
 	}
 }

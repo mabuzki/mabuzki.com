@@ -57,8 +57,8 @@ export default {
 	name: 'Login',
 	data () {
 		return {
-			email: '',
-			password: '',
+			email: 'im_niin@yeah.net',
+			password: 'saverland',
 			isLoading: false,
 			isDisabled: false
 		}
@@ -86,19 +86,18 @@ export default {
 							return
 						}
 						this.$toasted.show(response.data.info)
-						localStorage.setItem('userid', response.data.userid)
-						localStorage.setItem('username', response.data.username)
-						localStorage.setItem('token', response.data.token)
+						this.$store.commit('setUser', response.data)//vuex存储用户状态 userid username token
 
-						if (localStorage.getItem('token') !== null) {
-							this.GLOBAL.uid = response.data.userid
-							this.GLOBAL.username = response.data.username
-							this.GLOBAL.token = response.data.token
+						// if (localStorage.getItem('token') !== null) {
+						// 	this.GLOBAL.uid = response.data.userid
+						// 	this.GLOBAL.username = response.data.username
+						// 	this.GLOBAL.token = response.data.token
 
-							this.$http.defaults.headers.common['Authorization'] = 'Bearer ' + response.data.token
-							this.$bus.emit('handleNavbarLoginStatus', 'signed')
+						// 	this.$http.defaults.headers.common['Authorization'] = 'Bearer ' + response.data.token
+							// this.$bus.emit('handleNavbarLoginStatus', 'signed')
 							this.$bus.emit('handleModalLoginClose')
-						}
+						// }
+						console.log(this.$store.state)
 					}).catch((error) => {
 						this.isLoading = false
 						console.log(error)

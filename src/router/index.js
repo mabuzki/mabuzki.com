@@ -6,6 +6,8 @@ Vue.use(Router)
 export default new Router({
 	mode: 'history',
 	base: __dirname,
+	linkActiveClass: 'active-link',
+	linkExactActiveClass: 'is-selected',
 	routes: [
 		{
 			path: '/',
