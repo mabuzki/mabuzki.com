@@ -94,7 +94,6 @@ axios.interceptors.request.use((config) => {
 })
 
 axios.interceptors.response.use((response) => {
-	console.log(response)
 	if (response.data.info) {
 		Vue.prototype.$toasted.show(response.data.info)
 	}

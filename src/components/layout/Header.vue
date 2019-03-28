@@ -4,7 +4,7 @@
 	<div class="container">
 		<div class="navbar-brand is-hidden-desktop">
 			<router-link class="navbar-item link-user-avatar" :to="{name:'u', params: {uid: userId}}" v-if="userId">
-				<img v-bind:src="userAvatar" class="image is-28x28 avatar">
+				<img v-bind:src="userAvatar" class="image is-36x36 avatar">
 			</router-link>
 
 			<router-link class="navbar-item"  to="/">首页</router-link>
@@ -65,7 +65,7 @@
 
 				<div class="navbar-item has-dropdown is-hoverable is-right">
 					<router-link class="navbar-item link-user" :to="{name:'u', params: {uid: userId}}">
-						<img v-bind:src="userAvatar" class="image is-28x28 avatar">
+						<img v-bind:src="userAvatar" class="image is-36x36 avatar">
 					</router-link>
 
 					<div class="navbar-dropdown">
@@ -150,7 +150,7 @@ export default {
 			userId: this.$store.state.userinfo.id,
 			navbarShowBtnDraft: true,
 			navbarShowBtnPublish: false,
-			userAvatar: this.GLOBAL.avatar + this.$store.state.userinfo.id + '/0',
+			userAvatar: this.GLOBAL.avatar + this.$store.state.userinfo.id + '/1',
 			BtnPublishisLoading: false
 		}
 	},
@@ -179,7 +179,7 @@ export default {
 			if (_new.id) {
 				this.userId = _new.id
 				this.userName = _new.name
-				this.userAvatar = this.GLOBAL.api + '/avatar/' + _new.id + '/0'
+				this.userAvatar = this.GLOBAL.api + '/avatar/' + _new.id + '/1'
 			} else {
 				this.userId = null
 				this.userName = null
@@ -247,19 +247,6 @@ export default {
 		})
 
 		this.$bus.on('changeUserStatus', (data) => {//注册成功后控制用户状态
-			localStorage.setItem('userid', data.userid)
-			localStorage.setItem('username', data.username)
-			localStorage.setItem('token', data.token)
-
-			if (localStorage.getItem('token')) {
-				this.GLOBAL.uid = data.userid
-				this.GLOBAL.username = data.username
-				this.GLOBAL.token = data.token
-
-				this.$http.defaults.headers.common['Authorization'] = 'Bearer ' + data.token
-				this.$bus.emit('handleNavbarLoginStatus', 'signed')
-			}
-
 			if (data.origin == 'register') {
 				setTimeout(() => {
 					this.$modal.hide('modalRegister')

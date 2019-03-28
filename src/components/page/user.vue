@@ -10,7 +10,7 @@
 					<h3 class="title is-3">{{ username }}</h3>
 					<div class="bio">{{ bio }}</div>
 				</div>
-				<div class="media-right" v-if="userid == this.$route.params.uid">
+				<div class="media-right" v-if="this.$store.state.userinfo.id == this.$route.params.uid">
 					<router-link to="/setting">
 						<i class="title is-4 icon iconfont">&#xe608;</i>
 					</router-link>
@@ -18,7 +18,7 @@
 			</div>
 		</div>
 	</section>
-	<section class="section" v-if="userid == this.$route.params.uid">
+	<section class="section" v-if="this.$store.state.userinfo.id == this.$route.params.uid">
 
 	</section>
 </main>
@@ -29,12 +29,30 @@ export default {
 	name: 'user',
 	data() {
 		return {
-			userid: this.$store.state.userinfo.id,
+			userid: '',
 			username: '',
 			bio: '',
-			// userAvatar: 'data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw=='
-			userAvatar: this.GLOBAL.avatar + this.$route.params.uid + '/2',
+			userAvatar: 'data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==',
 			userinfo: ''
+		}
+	},
+	computed: {
+		getUID() {
+			return this.$route.params.uid
+		}
+	},
+	watch: {
+		getUID: function (_uid) {
+			this.username = this.bio = ''
+			this.userAvatar = 'data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw=='
+			this.$http.get( '/matrix/user-profile/' + _uid )
+				.then( (params) => {
+					if (params.data.success) {
+						this.username = params.data.result.username
+						this.bio = params.data.result.bio
+						this.userAvatar = this.GLOBAL.avatar + params.data.result.id + '/2'
+					}
+				})
 		}
 	},
 	beforeMount() {
@@ -43,12 +61,14 @@ export default {
 				if (params.data.success) {
 					this.username = params.data.result.username
 					this.bio = params.data.result.bio
+					this.userAvatar = this.GLOBAL.avatar + params.data.result.id + '/2'
 				}
-				console.log(params.data.result)
 			})
 	},
 	mounted() {
 	},
+	methods: {
+	}
 }
 </script>
 

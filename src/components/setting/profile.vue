@@ -68,7 +68,6 @@ export default {
 		}
 		this.$http.get( '/matrix/user-profile/' + this.userId )
 			.then((response) => {
-				console.log(response.data)
 				this.signature = response.data.result.bio
 				this.signatureUnLoaded = false
 			})

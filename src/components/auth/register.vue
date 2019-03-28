@@ -154,20 +154,17 @@ export default {
 						console.log(response.data)
 						this.isLoading = false
 						if (!response.data.success) {
-							for (var o in response.data.info) {
+							for (var o in response.data.extra) {
 								let target = document.querySelector('input[name=' + o + ']')
 								target.classList.add('is-danger')
 								target.nextElementSibling.style.display = ''
-								target.nextElementSibling.nextElementSibling.innerText = response.data.info[o]
+								target.nextElementSibling.nextElementSibling.innerText = response.data.extra[o]
 								target.nextElementSibling.nextElementSibling.style.display = ''
-								console.log(o)
-								console.log(response.data.info[o])
 							}
-							this.$toasted.show('注册失败')
 							return false
 						} else {
 							response.data.origin = 'register'
-							this.$toasted.show('注册成功，正在引导登入')
+							this.$store.commit('setUser', response.data)
 							this.$bus.emit('changeUserStatus', response.data)//控制用户状态 pos:header.vue
 						}
 					}).catch(function (error) {
