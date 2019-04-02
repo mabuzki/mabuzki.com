@@ -81,7 +81,6 @@ export default {
 					}).then((response) => {
 						console.log(response.data)
 						if (!response.data.success) {
-							this.$toasted.show(response.data.info)
 							this.isLoading = false
 							return
 						}

@@ -39,3 +39,7 @@ $addColors: (
   "github": ($github, $github-invert)
 );
 $colors: map-merge($colors, $addColors);
+
+//leez
+$body-size: .95em;
+$desc: #808080

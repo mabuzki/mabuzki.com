@@ -87,9 +87,23 @@ export default {
 	components: {//eslint-disable-line
 		RemoteJs
 	},
+	computed: {
+		userStatus() {
+			let userinfo = {
+				id: this.$store.state.userinfo.id
+			}
+			return userinfo
+		}
+	},
 	watch: {
+		userStatus: function (_new) {
+			if (_new.id) {
+				this.$bus.emit('handleNavbarShowBtnDraft', 'hide')
+				this.$bus.emit('handleNavbarShowBtnPublish', 'show')
+			}
+		},
 		content: function(newval) {
-			console.log(newval)
+			// console.log(newval)
 		},
 		preSubject: {
 			handler(newval) {
@@ -100,6 +114,11 @@ export default {
 	},
 	beforeMount () {
 		document.title = '草稿: 撰写中...'
+		if ( !this.$store.state.userinfo.id ) {
+			this.$bus.emit('handleModalLoginOpen')
+			this.$toasted.show('请重新登录')
+			return false
+		}
 		this.$bus.emit('handleNavbarShowBtnDraft', 'hide')
 		this.$bus.emit('handleNavbarShowBtnPublish', 'show')
 	},
@@ -351,3 +370,9 @@ export default {
 	}
 }
 </script>
+
+<style>
+.ti-input {
+	border: none!important
+}
+</style>

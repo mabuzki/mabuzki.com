@@ -73,27 +73,26 @@ export default {
 			articlePostDate: '',
 			articlePostDateTitle: '',
 			articleContent: '',
-			userId: '',
-			userName: '',
-			userAvatar: '',
+			userId: this.$store.state.userinfo.id,
+			userName: this.$store.state.userinfo.name,
+			userAvatar: 'data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==',
 			replyHeader: '',
 			selfHeader: '',
 			comments: []
 		}
 	},
-	mounted () {
+	beforeMount () {
 		const __self = this
+		this.userAvatar = this.GLOBAL.api + '/avatar/' + localStorage.getItem('userid') + '/0'
 
-		if (localStorage.getItem('token') !== null && localStorage.getItem('userid') !== null) {
-			this.userId = localStorage.getItem('userid')
-			this.userName = localStorage.getItem('username')
-			this.userAvatar = this.GLOBAL.api + '/avatar/' + localStorage.getItem('userid') + '/0'
-		}
+		// if (localStorage.getItem('token') !== null && localStorage.getItem('userid') !== null) {
+		// 	this.userId = localStorage.getItem('userid')
+		// 	this.userName = localStorage.getItem('username')
+			
+		// }
 
-		this.$http.get('/matrix/article-' + this.$route.params.id)
+		this.$http.get('/article/' + this.$route.params.id)
 			.then((response) => {
-				console.log(response)
-				console.log(response.data.result.content)
 				this.articleLoading = false
 				this.result = response.data.result
 				this.articleSubject = response.data.result.subject
@@ -112,30 +111,33 @@ export default {
 		// 	console.log(tinymce.activeEditor.getContent({format : 'html'}))
 		// }
 
-		document.addEventListener('lazybeforeunveil', function (e) {
-			console.log('test')
-			var target = e.target || e.srcElement
-			if (target.nodeName.toLowerCase() === 'footer') {
-				console.log('test')
-				// if ( UID ) {
-				// 	__self.replyHeader = '<div class="media-left avatar"><a href="'+ SITE +'u/'+ UID +'" title="" target="_blank"><img src="'+ SITE +'avatar/'+ UID +'/2" class="image is-32x32 avatar"></a></div><div class="media-content">'+ USERNAME +'</div><div class="media-right"><div class="dropdown is-hoverable is-up is-right"><div class="dropdown-trigger"><span class="icon"><i class="fa fa-ellipsis-v" aria-hidden="true"></i></span></div><div class="dropdown-menu" id="dropdown-menu4" role="menu"><div class="dropdown-content"><div class="dropdown-item"><p>积极回复来表示对作者的肯定哦~</p></div></div></div></div></div>';
-				// } else {
-				// 	__self.replyHeader = '<div class="media-content"><a href="'+ SITE +'login" title="">登录</a>之后才能发表你对这篇文章的看法</div>';
-				// }
+		// document.addEventListener('lazybeforeunveil', function (e) {
+		// 	console.log('test')
+		// 	var target = e.target || e.srcElement
+		// 	if (target.nodeName.toLowerCase() === 'footer') {
+		// 		console.log('test')
+		// 		// if ( UID ) {
+		// 		// 	__self.replyHeader = '<div class="media-left avatar"><a href="'+ SITE +'u/'+ UID +'" title="" target="_blank"><img src="'+ SITE +'avatar/'+ UID +'/2" class="image is-32x32 avatar"></a></div><div class="media-content">'+ USERNAME +'</div><div class="media-right"><div class="dropdown is-hoverable is-up is-right"><div class="dropdown-trigger"><span class="icon"><i class="fa fa-ellipsis-v" aria-hidden="true"></i></span></div><div class="dropdown-menu" id="dropdown-menu4" role="menu"><div class="dropdown-content"><div class="dropdown-item"><p>积极回复来表示对作者的肯定哦~</p></div></div></div></div></div>';
+		// 		// } else {
+		// 		// 	__self.replyHeader = '<div class="media-content"><a href="'+ SITE +'login" title="">登录</a>之后才能发表你对这篇文章的看法</div>';
+		// 		// }
 
-				__self.$http.get('/matrix/comment-' + __self.$route.params.id)
-					.then((response) => {
-						console.log(response.data)
-					})
-					.catch(function (error) {
-						console.log(error)
-					})
+		// 		__self.$http.get('/matrix/comment-' + __self.$route.params.id)
+		// 			.then((response) => {
+		// 				console.log(response.data)
+		// 			})
+		// 			.catch(function (error) {
+		// 				console.log(error)
+		// 			})
 
-				setTimeout(function () {
-					target.classList.remove('lazyloaded')
-				}, 300)
-			}
-		})
+		// 		setTimeout(function () {
+		// 			target.classList.remove('lazyloaded')
+		// 		}, 300)
+		// 	}
+		// })
+	},
+	beforeDestroy () {
+		// document.removeEventListener('lazybeforeunveil')
 	},
 	methods: {
 		doThat: function () {

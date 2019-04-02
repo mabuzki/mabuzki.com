@@ -21,20 +21,57 @@
 				</div>
 			</div>
 		</div>
-		<router-view/>
+		<router-view v-if="isRouterAlive"/>
     </main>
 </template>
 
 <script>
 export default {
+	provide() {
+		return {
+			reload: this.reload
+		}
+	},
 	data () {
 		return {
+			isRouterAlive: true
+		}
+	},
+	computed: {
+		userStatus() {
+			let userinfo = {
+				id: this.$store.state.userinfo.id
+			}
+			return userinfo
+		}
+	},
+	watch: {
+		userStatus: function (_new) {
+			if (_new.id) {
+				this.reload()
+			}
+		}
+	},
+	beforeCreate () {
+		if ( !this.$store.state.userinfo.id ) {
+			this.$bus.emit('handleModalLoginOpen')
+			this.$toasted.show('请重新登录')
+			return false
 		}
 	},
 	methods: {
 		handleModalLogoutOpen () {
 			this.$bus.emit('handleModalLogoutOpen')
+		},
+		reload() {
+			this.isRouterAlive = false
+			this.$nextTick(function() {
+				this.isRouterAlive = true
+			})
 		}
+	},
+	beforeDestroy () {
+		this.$bus.emit('handleModalLoginClose', 0)
 	}
 }
 </script>

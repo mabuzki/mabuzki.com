@@ -64,6 +64,10 @@
 			<a class="button is-dark is-medium is-fullwidth" :class="{'is-loading': isLoading}" @click="validateBeforeSubmit">注册</a>
 		</div>
 
+		<div class="field has-text-centered">
+			<a class="button is-green is-medium is-fullwidth" :class="{'is-loading': isLoadingSec}" @click="useDemoLogin">体验账号登录</a>
+		</div>
+
 		<!-- <div class="ui horizontal divider">或者</div>
 		<i class="weibo icon"></i>
 		<i class="wechat icon"></i> -->
@@ -135,7 +139,8 @@ export default {
 			password: '',
 			telphone: '',
 			secchk: '',
-			isLoading: false
+			isLoading: false,
+			isLoadingSec: false
 		}
 	},
 	methods: {
@@ -173,6 +178,25 @@ export default {
 					})
 				}
 			})
+		},
+		useDemoLogin () {
+			this.isLoadingSec = true
+			this.$http.post('/auth/login', {
+				email: 'demo@mabuzki.com',
+				password: 'demo123',
+				remember: 1
+				}).then((response) => {
+					if (!response.data.success) {
+						this.isLoadingSec = false
+						return
+					}
+					response.data.origin = 'register'
+					this.$store.commit('setUser', response.data)//vuex存储用户状态 userid username token
+					this.$bus.emit('changeUserStatus', response.data)//控制用户状态 pos:header.vue
+				}).catch((error) => {
+					this.isLoadingSec = false
+					console.log(error)
+				})
 		}
 	}
 }

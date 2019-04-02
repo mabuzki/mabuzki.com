@@ -3,12 +3,12 @@
 	<section class="section">
 		<div class="container">
 			<h2 class="title is-3">
-				关于<span class="title is-5">/About</span>
+				项目说明<span class="title is-5">/Project description</span>
 			</h2>
 			<div class="content">
-				Mabuzki.com现行系统后端基于Laravel，前端使用了Vue全家桶，框架为前后端分离状态，利于后期封装。
+				Mabuzki.com系统后端基于Laravel，前端基于Vue全家桶(Vue + Vue Router + Vuex)，框架为前后端分离状态，利于后期封装。
 				<br>
-				PC/Mobile布局及其他功能还在持续编写调整中
+				PC/Mobile布局及其他功能还在持续编写调整中。
 			</div>
 		</div>
 	</section>
@@ -20,7 +20,30 @@
 			<div class="content">
 				<div class="field">
 					<h4 class="title">
-						2019/3/28<em class="title is-6">0.2.0</em>
+						{{ ver }}<em class="title is-6">2019/4/2</em>
+					</h4>
+					<ul>
+						<li>前端: 文章列表页补全</li>
+						<li>前端: 个人页面文章列表补全</li>
+						<li>后端: api接口地址调整</li>
+					</ul>
+				</div>
+				<div class="field">
+					<h4 class="title">
+						0.2.7<em class="title is-6">2019/3/29</em>
+					</h4>
+					<ul>
+						<li>前端: Login登录失败流程fix, 不再弹出两个toast</li>
+						<li>前端: 注册页面增加了体验账号登录</li>
+						<li>前端: 文章发表页css样式调整</li>
+						<li>前端: 文章发布页现在拒绝为未认证用户服务</li>
+						<li>前端: 页头发布按钮判断规则优化</li>
+						<li>后端: 文章发布页现在拒绝为未认证用户服务</li>
+					</ul>
+				</div>
+				<div class="field">
+					<h4 class="title">
+						0.2.0<em class="title is-6">2019/3/28</em>
 					</h4>
 					<ul>
 						<li>前端: Vuex针对令牌优化</li>
@@ -34,11 +57,10 @@
 				</div>
 				<div class="field">
 					<h4 class="title">
-						2019/3/14<em class="title is-6">0.1.0</em>
+						0.1.0<em class="title is-6">2019/3/14</em>
 					</h4>
 					<ul>
-
-						<li>Alpha online</li>
+						<li>online</li>
 					</ul>
 				</div>
 			</div>
@@ -48,14 +70,25 @@
 </template>
 
 <script>
+
 export default {
+	data() {
+		return {
+			ver: window.ver
+		}
+	},
+	mounted() {
+	}
 }
 </script>
 
-<style>
+<style scoped>
 em.title {
 	margin-left: 10px;
 	font-style: normal
 }
-</style>
 
+.content {
+	font-size: smaller
+}
+</style>

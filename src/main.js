@@ -21,6 +21,10 @@ window.Vue = Vue
 
 Vue.use(Vuex)
 
+//eslint-disable-next-line
+const ver = '0.3.3'
+window.ver = ver
+
 const store = new Vuex.Store({
 	state: {
 		userinfo: {
@@ -30,7 +34,7 @@ const store = new Vuex.Store({
 		}
 	},
 	mutations: {
-		setUser (state, data) {3
+		setUser (state, data) {
 			localStorage.setItem('userid', data.userid)
 			localStorage.setItem('username', data.username)
 			localStorage.setItem('token', data.token)
@@ -109,16 +113,13 @@ axios.interceptors.response.use((response) => {
 	}
 	return response
 }, (error) => {
-	// 处理响应失败
-	switch (error.response.status) {
-	// 如果响应中的 http code 为 401，那么则此用户可能 token 失效了之类的，我会触发 logout 方法，清除本地的数据并将用户重定向至登录页面
-	case 401:
-		global_.notice.force({ type: 'error', text: error.response.data.info, callback: () => { console.log('test') } })
-		break
-	// 如果响应中的 http code 为 400，那么就弹出一条错误提示给用户
-	case 400:
-		return this.$Message.error(error.response.data.error)
-	}
+	// switch (error.response.status) {
+	// case 401:
+	// 	global_.notice.force({ type: 'error', text: error.response.data.info, callback: () => { console.log('test') } })
+	// 	break
+	// case 400:
+	// 	return this.$Message.error(error.response.data.error)
+	// }
 	return Promise.reject(error)
 })
 
@@ -127,7 +128,7 @@ Vue.prototype.$utils = utils
 
 router.beforeEach((to, from, next) => {
 	if (!store.state.userinfo.token && !store.state.userinfo.id) {//未登录
-		if (to.path === '/setting' || to.path === '/setting/account' || to.path === '/setting/profile' || to.path === '/draft') {
+		if (to.path === '/setting' || to.path === '/draft') {
 			next({path: '/needlogin'})
 		}
 	}

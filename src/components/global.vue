@@ -1,6 +1,6 @@
 <script>
 // const site = document.querySelector('meta[name=siteurl]').content
-
+const V = '0.2.2'
 // eslint-disable-next-line
 const site = process.env.VUE_APP_SITE
 // eslint-disable-next-line

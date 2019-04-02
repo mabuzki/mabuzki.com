@@ -37,7 +37,7 @@ export default new Router({
 			component: resolve => require(['@/components/page/message.vue'], resolve)
 		},
 		{
-			name: 'Setting',
+			name: 'setting',
 			path: '/setting',
 			component: resolve => require(['@/components/setting/main.vue'], resolve),
 			children: [
@@ -50,6 +50,10 @@ export default new Router({
 					component: resolve => require(['@/components/setting/profile.vue'], resolve)
 				}
 			]
+		},
+		{
+			path: '/articles',
+			component: resolve => require(['@/components/page/articles.vue'], resolve)
 		},
 		{
 			path: '/article/:id',

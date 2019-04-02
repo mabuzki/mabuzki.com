@@ -1,7 +1,9 @@
 <template>
 	<div id="site-main">
 		<header-container/>
-		<router-view/>
+		<keep-alive :include="/a|b/">
+			<router-view />
+		</keep-alive>		
 		<footer-container/>
 		<modals-container/>
 	</div>
@@ -28,3 +30,7 @@ export default {
 	}
 }
 </script>
+
+<style scoped>
+
+</style>

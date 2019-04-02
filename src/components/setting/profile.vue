@@ -51,7 +51,7 @@ export default {
 	name: 'SettingProfile',
 	data () {
 		return {
-			userAvatar: '',
+			userAvatar: this.GLOBAL.api + '/avatar/' + this.$store.state.userinfo.id + '/2',
 			signature: '',
 			cropped: null,
 			cropResultIsActive: false,
@@ -60,15 +60,11 @@ export default {
 			isLoading: false,
 		}
 	},
-	mounted () {
-		if (localStorage.getItem('token') !== null && localStorage.getItem('userid') !== null) {
-			this.userId = localStorage.getItem('userid')
-			this.userName = localStorage.getItem('username')
-			this.userAvatar = this.GLOBAL.api + '/avatar/' + localStorage.getItem('userid') + '/2'
-		}
-		this.$http.get( '/matrix/user-profile/' + this.userId )
+	beforeMount () {
+		if ( !this.$store.state.userinfo.id ) return false
+		this.$http.get( '/user-profile/' + this.$store.state.userinfo.id )
 			.then((response) => {
-				this.signature = response.data.result.bio
+				this.signature = response.data.userinfo.bio
 				this.signatureUnLoaded = false
 			})
 			.catch(function (error) {
@@ -89,7 +85,7 @@ export default {
 		},
 		post_signature (e) {
 			this.isLoading = true
-			this.$http.post('/setting/profile/update', {
+			this.$http.post('/setting-profile-update', {
 				signature: this.signature
 			})
 			.then((response) => {

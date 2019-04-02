@@ -107,7 +107,8 @@ export default {
 		content: function (newContent) {
 		}
 	},
-	mounted () {
+	beforeMount () {
+		if ( !this.$store.state.userinfo.id ) return false
 		this.getAccount()
 		// this.$validator.extend('mobile', {
 		// 	messages: {
@@ -120,9 +121,8 @@ export default {
 	},
 	methods: {
 		getAccount () {
-			this.$http.post( '/matrix/setting-account' )
+			this.$http.post( '/setting-account' )
 				.then((response) => {
-					console.log(response.data);
 					this.mobile = response.data.result.mobile;
 					this.email = response.data.result.email;
 				})

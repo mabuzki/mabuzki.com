@@ -1,0 +1,68 @@
+/* index */
+main.index {
+	padding-top: 0;
+	min-height: calc(100vh - 180px - 3rem);
+}
+main.index .index-baner {
+	position: relative;
+	width: 100%;
+	height: calc(100vh);
+}
+main.index .video-bg , main.index .image-bg{
+	position: absolute;
+	width: 100%;
+	height: 100%;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    overflow: hidden;
+    z-index: -1;
+}
+main.index .video-bg video {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+main.index .index-content {
+	position: absolute;
+	display: flex;
+    width: 100%;
+    height: 100%;
+	text-align: center;
+	color: #FFF;
+	text-shadow: 0 0 5px rgba(0, 0, 0, .5);
+	justify-content: center;
+	align-items: center
+}
+main.index .index-content .tips a {
+	margin-top: 2rem
+}
+main.index .image-bg {
+	background: url(../assets/image/the_beauty_of_a_second.jpg) no-repeat center center;
+	background-size: cover
+}
+main.index a {
+	-webkit-transition: all .2s ease-in-out;
+    -moz-transition: all .2s ease-in-out;
+    -o-transition: all .2s ease-in-out;
+    -ms-transition: all .2s ease-in-out;
+    transition: all .2s ease-in-out;
+}
+main.index a:hover, main.index a:visited {
+	text-shadow: none;
+}
+#site-main.page-index footer.footer {
+	position: absolute;
+	bottom: 0;
+	left: 0;
+	right: 0;
+	background: none;
+	color: #FFF;
+}
+#site-main.page-index footer.footer a {
+	color: #FFF;
+}

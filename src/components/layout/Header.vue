@@ -8,7 +8,8 @@
 			</router-link>
 
 			<router-link class="navbar-item"  to="/">首页</router-link>
-			<router-link class="navbar-item"  to="/hire-me">Hire Me</router-link>
+
+			<router-link class="navbar-item"  to="/articles">文章</router-link>
 
 			<div class="tablet-btn" v-if="userId">
 				<div class="navbar-item" v-if="navbarShowBtnDraft">
@@ -47,7 +48,7 @@
 		<div id="navMenu" class="navbar-menu">
 			<div class="navbar-start">
 				<router-link class="navbar-item"  to="/">首页</router-link>
-				<router-link class="navbar-item"  to="/hire-me">Hire Me</router-link>
+				<router-link class="navbar-item"  to="/articles">文章</router-link>
 			</div>
 
 			<div class="navbar-end" v-if="userId">
@@ -154,16 +155,6 @@ export default {
 			BtnPublishisLoading: false
 		}
 	},
-	beforeMount () {
-		// localStorage.setItem('userid', '')
-		// localStorage.setItem('username', '')
-		// localStorage.setItem('token', '')
-		// if (this.$store.state.token && this.$store.state.userid) {
-		// 	this.userId = this.$store.state.userid
-		// 	this.userName = this.$store.state.username
-		// 	this.userAvatar = this.GLOBAL.avatar + this.$store.state.userid + '/0'
-		// }
-	},
 	computed: {
 		userStatus() {
 			let userinfo = {
@@ -172,6 +163,9 @@ export default {
 				token: this.$store.state.userinfo.token
 			}
 			return userinfo
+		},
+		watchPath() {//监视路径
+			return this.$route.path
 		}
 	},
 	watch: {
@@ -185,34 +179,28 @@ export default {
 				this.userName = null
 				this.userAvatar = null
 			}
+		},
+		watchPath: function (_path) {
+			if (_path == '/draft' && this.userId == this.$store.state.userinfo.id) {//控制发布页头按钮
+				this.navbarShowBtnDraft = false
+				this.navbarShowBtnPublish = true
+			}  else {
+				this.navbarShowBtnDraft = true
+				this.navbarShowBtnPublish = false
+			}
 		}
 	},
 	mounted () {
-		this.$bus.on('handleNavbarShowBtnDraft', (action) => {
-			if (action === 'hide') {
-				this.navbarShowBtnDraft = false
-			} else {
-				this.navbarShowBtnDraft = true
-			}
-		})
-		this.$bus.on('handleNavbarShowBtnPublish', (action) => {
-			if (action === 'show') {
-				this.navbarShowBtnPublish = true
-			} else {
-				this.navbarShowBtnPublish = false
-			}
-		})
-
-		this.$bus.on('handleNavbarLoginStatus', (action) => { // 注册call
-			if (action === 'signed') {
-				this.userId = localStorage.getItem('userid')
-				this.userName = localStorage.getItem('username')
-				this.userAvatar = this.GLOBAL.api + '/avatar/' + localStorage.getItem('userid') + '/0'
-			} else {
-				this.$store.commit('clearUser')
-				this.userId = ''
-			}
-		})
+		// this.$bus.on('handleNavbarLoginStatus', (action) => { // 注册call
+		// 	if (action === 'signed') {
+		// 		this.userId = localStorage.getItem('userid')
+		// 		this.userName = localStorage.getItem('username')
+		// 		this.userAvatar = this.GLOBAL.api + '/avatar/' + localStorage.getItem('userid') + '/0'
+		// 	} else {
+		// 		this.$store.commit('clearUser')
+		// 		this.userId = ''
+		// 	}
+		// })
 
 		this.$bus.on('handleModalLoginOpen', () => {
 			this.$modal.show(ComponentLogin, {
@@ -232,11 +220,12 @@ export default {
 			this.handleModalLogoutOpen ()
 		})
 
-		this.$bus.on('handleModalLoginClose', () => {
+		this.$bus.on('handleModalLoginClose', (time) => {
+			let _time = time ? 1500 : time
 			let __self = this
 			setTimeout(() => {
 				__self.$modal.hide('modalLogin')
-			}, 1500)
+			}, _time)
 		})
 
 		this.$bus.on('swtichModalRegister', () => {//登录页面转入注册并关闭后层LoginModal

@@ -4,7 +4,7 @@
 		<div class="container">
 			<div class="media">
 				<div class="avatar media-left">
-					<img v-bind:src="userAvatar" class="image is-128x128 avatar">
+					<img :src="userAvatar" class="image is-128x128 avatar">
 				</div>
 				<div class="media-content">
 					<h3 class="title is-3">{{ username }}</h3>
@@ -18,8 +18,26 @@
 			</div>
 		</div>
 	</section>
-	<section class="section" v-if="this.$store.state.userinfo.id == this.$route.params.uid">
-
+	<section class="section">
+		<div class="container">
+			<div class="content" v-if="nopost">
+				还没发表过内容
+			</div>
+			<div class="content" v-else>
+				<div class="card card-article" v-for="article in articles" :key="article.id" @click="jumpToArticle(article.id)">
+					<header class="card-header">
+						<p class="card-header-title">
+							{{ article.subject }}
+						</p>
+					</header>
+					<div class="card-content">
+						<div class="content" v-html="article.content">
+						</div>
+						<time :datetime="article.date_post" :title="article.date_post_title" v-text="article.date_post"></time>
+					</div>
+				</div>
+			</div>
+		</div>
 	</section>
 </main>
 </template>
@@ -33,7 +51,9 @@ export default {
 			username: '',
 			bio: '',
 			userAvatar: 'data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==',
-			userinfo: ''
+			userinfo: '',
+			nopost: false,
+			articles: []
 		}
 	},
 	computed: {
@@ -42,32 +62,53 @@ export default {
 		}
 	},
 	watch: {
-		getUID: function (_uid) {
+		getUID: function (uid) {
+			if (!uid) return false
 			this.username = this.bio = ''
 			this.userAvatar = 'data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw=='
-			this.$http.get( '/matrix/user-profile/' + _uid )
-				.then( (params) => {
-					if (params.data.success) {
-						this.username = params.data.result.username
-						this.bio = params.data.result.bio
-						this.userAvatar = this.GLOBAL.avatar + params.data.result.id + '/2'
-					}
-				})
+			this.getUserInfo(uid)
+			this.nopost = false
 		}
 	},
 	beforeMount() {
-		this.$http.get( '/matrix/user-profile/' + this.$route.params.uid )
-			.then( (params) => {
-				if (params.data.success) {
-					this.username = params.data.result.username
-					this.bio = params.data.result.bio
-					this.userAvatar = this.GLOBAL.avatar + params.data.result.id + '/2'
-				}
-			})
-	},
-	mounted() {
+		this.getUserInfo(this.$route.params.uid)
 	},
 	methods: {
+		getUserInfo (uid) {
+			this.$http.get( '/user-profile/' + uid )
+				.then( (params) => {
+					if (params.data.success) {
+						if (params.data.userinfo.status === 0) {
+							this.username = params.data.userinfo.username
+							this.bio = params.data.userinfo.bio
+							this.userAvatar = this.GLOBAL.avatar + params.data.userinfo.id + '/2'
+							if (!params.data.articles[0]) {
+								this.nopost = true
+							} else {
+								this.nopost = false
+								this.articles = params.data.articles
+							}
+						} else if (params.data.userinfo.status === -1) {
+
+						}
+					}
+				})
+			
+			// this.$http.get( '/matrix/user-article/' + uid + '/1')
+			// 	.then( (_params) => {
+			// 		if ( !_params.data.result ) {
+			// 			this.nopost = true
+			// 		} else {
+			// 			this.noposet = false
+						
+			// 		}
+			// 	})
+		},
+		jumpToArticle(id) {
+			this.$router.push({path: '/article/'+id});
+		}
+	},
+	beforeDestroy() {
 	}
 }
 </script>
@@ -78,6 +119,9 @@ export default {
 	width: 90px;
 	height: 90px;
 	border-radius: 50%
+}
+time {
+	font-size: smaller
 }
 </style>
 
