@@ -29,21 +29,21 @@
 				@update="update">
 			</vue-croppie>
 
-			<a class="button" @click="rechoose()">
+			<a class="button is-rounded" @click="rechoose()">
 				<span class="icon">
 					<i class="iconfont has-text-dark">&#xe672;</i>
 				</span>
 				<span>重新选择</span>
 			</a>
 
-			<a class="button" @click="rotate(-90)">
+			<a class="button is-rounded" @click="rotate(-90)">
 				<span class="icon is-small">
 					<i class="iconfont has-text-dark">&#xe600;</i>
 				</span>
 				<span>旋转</span>
 			</a>
 
-			<a class="button" @click="next()">
+			<a class="button is-rounded" @click="next()">
 				<span class="icon">
 					<i class="iconfont has-text-dark">&#xe696;</i>
 				</span>
@@ -55,13 +55,13 @@
 				<img v-bind:src="cropped">
 			</div>
 
-			<a class="button" @click="prev()">
+			<a class="button is-rounded" @click="prev()">
 				<span class="icon">
 					<i class="iconfont has-text-dark">&#xe672;</i>
 				</span>
 				<span>上一步</span>
 			</a>
-			<a class="button" @click="upload()" v-bind:class="{ 'is-loading': cropUploadIsActive }">
+			<a class="button is-rounded" @click="upload()" v-bind:class="{ 'is-loading': cropUploadIsActive }">
 				<span class="icon">
 					<i class="iconfont has-text-dark">&#xe660;</i>
 				</span>
@@ -93,6 +93,11 @@ export default {
 			cropUploadIsActive: false,
 			cropResult: null
 		}
+	},
+	beforeMount () {
+	},
+	beforeDestroy () {
+		this.$modal.hide('modalAvatarPicker')
 	},
 	methods: {
 		next () {
@@ -129,10 +134,9 @@ export default {
 					}
 				}
 			}).then((response) => {
-				console.log(response)
 				if (response.data.success) {
-					document.querySelectorAll('.image.avatar')[0].src = response.data.small
-					document.querySelectorAll('.image.avatar')[1].src = response.data.link
+					this.$store.commit('refreshCacheKey', this.GLOBAL.generateRandom(10, false))
+					this.$store.commit('avatarUploaded', response.data.newAvatar)
 					this.$modal.hide('modalAvatarPicker')
 					setTimeout(() => {
 						this.cropResultIsActive = false
@@ -180,7 +184,6 @@ export default {
 					// let frag = document.createDocumentFragment(), node, lastNode;
 					let url = URL.createObjectURL(_m.GLOBAL.dataURItoBlob(reader.result))
 					// let id = 'blobid-' + (new Date()).getTime();
-					console.log(url)
 
 					_m.$refs.croppieRef.bind({
 						url: url
@@ -195,3 +198,15 @@ export default {
 	}
 }
 </script>
+
+<style scoped>
+.v--modal-box input {
+	border-bottom: none
+}
+.button {
+	border: none;
+}
+.v--modal-box a.button:hover {
+	background: #FAFAFA;
+}
+</style>

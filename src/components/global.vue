@@ -1,12 +1,12 @@
 <script>
 // const site = document.querySelector('meta[name=siteurl]').content
-const V = '0.2.2'
 // eslint-disable-next-line
 const site = process.env.VUE_APP_SITE
 // eslint-disable-next-line
 const api = process.env.VUE_APP_API
+const oss = '//junk.mabuzki.com'
 // eslint-disable-next-line
-const avatar = process.env.VUE_APP_API + '/avatar/'
+const avatar = '//junk.mabuzki.com/avatar/'
 var uid = ''
 var username = ''
 var token = ''

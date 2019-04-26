@@ -20,10 +20,35 @@
 			<div class="content">
 				<div class="field">
 					<h4 class="title">
-						{{ ver }}<em class="title is-6">2019/4/2</em>
+						{{ ver }}<em class="title is-6">2019/4/17</em>
 					</h4>
 					<ul>
-						<li>前端: 文章列表页补全</li>
+						<li>前端: avatar显示方式调整</li>
+						<li>后端: 精简服务</li>
+						<li>后端: avatar处理流程调整</li>
+						<li>后端: avatar直接上传至oss</li>
+					</ul>
+				</div>
+				<div class="field">
+					<h4 class="title">
+						0.4.1<em class="title is-6">2019/4/17</em>
+					</h4>
+					<ul>
+						<li>前端: Vue全家桶依赖库更新</li>
+						<li>前端: 文章发布页编辑器弃用Ckeditor, 启用TinyMCE</li>
+						<li>前端: 页头优化</li>
+						<li>前端: 页脚显示判断加入</li>
+						<li>前端: 文章聚合页/文章单页/个人首页现在能正确的解析附件图片</li>
+						<li>后端: 解析附件图片方式调整</li>
+						<li>后端: 文章发布流程调整</li>
+					</ul>
+				</div>
+				<div class="field">
+					<h4 class="title">
+						0.3.3<em class="title is-6">2019/4/2</em>
+					</h4>
+					<ul>
+						<li>前端: 文章聚合页补全</li>
 						<li>前端: 个人页面文章列表补全</li>
 						<li>后端: api接口地址调整</li>
 					</ul>
@@ -33,7 +58,7 @@
 						0.2.7<em class="title is-6">2019/3/29</em>
 					</h4>
 					<ul>
-						<li>前端: Login登录失败流程fix, 不再弹出两个toast</li>
+						<li>前端: 登录失败流程fix, 不再弹出两个toast</li>
 						<li>前端: 注册页面增加了体验账号登录</li>
 						<li>前端: 文章发表页css样式调整</li>
 						<li>前端: 文章发布页现在拒绝为未认证用户服务</li>

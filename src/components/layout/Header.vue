@@ -1,5 +1,5 @@
 <template>
-<header class="navbar">
+<header class="navbar is-fixed-top">
 	<div id="specialShadow" class="bd-special-shadow"></div>
 	<div class="container">
 		<div class="navbar-brand is-hidden-desktop">
@@ -7,23 +7,13 @@
 				<img v-bind:src="userAvatar" class="image is-36x36 avatar">
 			</router-link>
 
-			<router-link class="navbar-item"  to="/">首页</router-link>
-
-			<router-link class="navbar-item"  to="/articles">文章</router-link>
+			<router-link class="navbar-item" to="/">首页</router-link>
+			<router-link class="navbar-item" to="/articles">文章</router-link>
 
 			<div class="tablet-btn" v-if="userId">
-				<div class="navbar-item" v-if="navbarShowBtnDraft">
-					<router-link class="button is-link link-draft is-rounded" to="/draft">
-						<span class="icon">
-							<i class="iconfont">&#xe603;</i>
-						</span>
-						<span>新文章</span>
-					</router-link>
-				</div>
-
-				<div class="navbar-item is-hoverable" v-if="navbarShowBtnPublish">
+				<div class="navbar-item" v-if="this.$store.state.showBtnPublish">
 					<a class="button is-link link-draft is-rounded"
-						@click="handleBtnPublish()"
+						@click.stop="handleBtnPublish()"
 						:class="{'is-loading': BtnPublishisLoading}">
 						<span class="icon">
 							<i class="iconfont">&#xe61d;</i>
@@ -31,10 +21,18 @@
 						<span>立即发布</span>
 					</a>
 				</div>
-			</div>
-			
 
-			<div id="navbarBurger"
+				<div class="navbar-item is-hoverable" v-else>
+					<router-link class="button is-link link-draft is-rounded" to="/draft">
+						<span class="icon">
+							<i class="iconfont">&#xe603;</i>
+						</span>
+						<span>新文章</span>
+					</router-link>
+				</div>
+			</div>
+
+			<!-- <div id="navbarBurger"
 				class="navbar-burger burger"
 				data-target="navMenu"
 				@click="handleModalLoginOpen()"
@@ -42,13 +40,21 @@
 				<span></span>
 				<span></span>
 				<span></span>
-			</div>
+			</div> -->
+
+			<a
+				class="navbar-item is-right"
+				style="margin-left: auto"
+				@click="handleModalLoginOpen()"
+				v-else>
+				登录/注册
+			</a>
 		</div>
 
 		<div id="navMenu" class="navbar-menu">
 			<div class="navbar-start">
-				<router-link class="navbar-item"  to="/">首页</router-link>
-				<router-link class="navbar-item"  to="/articles">文章</router-link>
+				<router-link class="navbar-item" to="/">首页</router-link>
+				<router-link class="navbar-item" to="/articles">文章</router-link>
 			</div>
 
 			<div class="navbar-end" v-if="userId">
@@ -87,40 +93,24 @@
 					</div>
 				</div>
 
-				<div class="navbar-item" v-if="navbarShowBtnDraft">
-					<router-link class="button is-link link-draft is-rounded" to="/draft">
-						<span class="icon">
-							<i class="iconfont">&#xe603;</i>
-						</span>
-						<span>新文章</span>
-					</router-link>
-				</div>
-
-				<div class="navbar-item is-hoverable" v-if="navbarShowBtnPublish">
+				<div class="navbar-item" v-if="this.$store.state.showBtnPublish">
 					<a class="button is-link link-draft is-rounded"
-						@click="handleBtnPublish()"
+						@click.stop="handleBtnPublish()"
 						:class="{'is-loading': BtnPublishisLoading}">
 						<span class="icon">
 							<i class="iconfont">&#xe61d;</i>
 						</span>
 						<span>立即发布</span>
 					</a>
+				</div>
 
-					<!-- <div class="navbar-dropdown">
-						<a class="navbar-item" >私密发布</a>
-						<a class="navbar-item" >保存草稿</a>
-						<hr class="navbar-divider">
-						<div class="navbar-item">
-							<div>
-								<p class="is-size-6-desktop">
-									<strong>alpha</strong>
-								</p>
-								<small>
-									<a class="bd-view-all-versions" href="#">mabuzki</a>
-								</small>
-							</div>
-						</div>
-					</div> -->
+				<div class="navbar-item is-hoverable" v-else>
+					<router-link class="button is-link link-draft is-rounded" to="/draft">
+						<span class="icon">
+							<i class="iconfont">&#xe603;</i>
+						</span>
+						<span>新文章</span>
+					</router-link>
 				</div>
 
 			</div>
@@ -139,19 +129,23 @@
 </template>
 
 <script>
+import Vue from 'vue'
 import ComponentLogin from '@/components/auth/login.vue'
 import ComponentRegister from '@/components/auth/register.vue'
 import ComponentLogout from '@/components/auth/logout.vue'
 import ComponentNavList from '@/components/layout/NavList.vue'
+
+Vue.component('tab-home', { 
+	template: `<div>Home component</div>`
+})
 
 export default {
 	data () {
 		return {
 			userName: this.$store.state.userinfo.name,
 			userId: this.$store.state.userinfo.id,
-			navbarShowBtnDraft: true,
-			navbarShowBtnPublish: false,
-			userAvatar: this.GLOBAL.avatar + this.$store.state.userinfo.id + '/1',
+			userAvatar: this.$store.state.userinfo.avatar + '!avatar_small',
+			needverify: this.$store.state.userinfo.needverify,
 			BtnPublishisLoading: false
 		}
 	},
@@ -160,12 +154,11 @@ export default {
 			let userinfo = {
 				id: this.$store.state.userinfo.id,
 				name: this.$store.state.userinfo.name,
-				token: this.$store.state.userinfo.token
+				token: this.$store.state.userinfo.token,
+				avatar: this.$store.state.userinfo.avatar,
+				userCacheKey: this.$store.state.userinfo.userCacheKey
 			}
 			return userinfo
-		},
-		watchPath() {//监视路径
-			return this.$route.path
 		}
 	},
 	watch: {
@@ -173,35 +166,15 @@ export default {
 			if (_new.id) {
 				this.userId = _new.id
 				this.userName = _new.name
-				this.userAvatar = this.GLOBAL.api + '/avatar/' + _new.id + '/1'
+				this.userAvatar = this.GLOBAL.avatar + _new.avatar + '!avatar_small'
 			} else {
 				this.userId = null
 				this.userName = null
 				this.userAvatar = null
 			}
-		},
-		watchPath: function (_path) {
-			if (_path == '/draft' && this.userId == this.$store.state.userinfo.id) {//控制发布页头按钮
-				this.navbarShowBtnDraft = false
-				this.navbarShowBtnPublish = true
-			}  else {
-				this.navbarShowBtnDraft = true
-				this.navbarShowBtnPublish = false
-			}
 		}
 	},
 	mounted () {
-		// this.$bus.on('handleNavbarLoginStatus', (action) => { // 注册call
-		// 	if (action === 'signed') {
-		// 		this.userId = localStorage.getItem('userid')
-		// 		this.userName = localStorage.getItem('username')
-		// 		this.userAvatar = this.GLOBAL.api + '/avatar/' + localStorage.getItem('userid') + '/0'
-		// 	} else {
-		// 		this.$store.commit('clearUser')
-		// 		this.userId = ''
-		// 	}
-		// })
-
 		this.$bus.on('handleModalLoginOpen', () => {
 			this.$modal.show(ComponentLogin, {
 				text: ''
@@ -244,8 +217,6 @@ export default {
 				this.$bus.emit('handleModalLoginClose')
 			}
 		})
-	},
-	beforeDestroy() {
 	},
 	methods: {
 		handleModalLoginOpen () {//弹出modal login页面

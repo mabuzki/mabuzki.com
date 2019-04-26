@@ -1,0 +1,81 @@
+<template id="template">
+<section class="section">
+	<div class="container setting-account-section">
+		<form method="POST" @submit.prevent="validateBeforeSubmit">
+			<section>
+				<h2 class="title is-3">验证账号</h2>
+				<div class="field mobile">
+					<h4 class="title is-5">手机</h4>
+					<div class="media">
+						<div class="media-content">
+							<div class="control has-icons-right">
+								<input name="mobile" v-model="mobile" :class="{'input': true}" type="text" placeholder="手机号码">
+								<span class="icon is-small is-right"><i class="fa fa-warning"></i></span>
+								<span class="help is-danger"></span>
+							</div>
+						</div>
+						<div class="media-right">
+							<div class="button" disabled>修改</div>
+						</div>
+					</div>
+				</div>
+			</section>
+		</form>
+	</div>
+</section>
+</template>
+
+<script>
+export default {
+	name: 'SettingAccount',
+	data () {
+		return {
+			mobile: '',
+			email: '',
+			notifys: [
+				{ text: '全部', class: 'is-success is-selected' },
+				{ text: '仅好友' },
+				{ text: '免打扰' }
+			]
+		}
+	},
+	watch: {
+		content: function (newContent) {
+		}
+	},
+	beforeMount () {
+		if ( !this.$store.state.userinfo.id ) return false
+		this.getAccount()
+		// this.$validator.extend('mobile', {
+		// 	messages: {
+		// 		en:field => field + '必须是11位手机号码',
+		// 	},
+		// 	validate: value => {
+		// 		return value.length == 11 && /^((13|14|15|17|18)[0-9]{1}\d{8})$/.test(value)
+		// 	}
+		// });
+	},
+	methods: {
+		getAccount () {
+			this.$http.post( '/setting-account' )
+				.then((response) => {
+					this.mobile = response.data.result.mobile;
+					this.email = response.data.result.email;
+				})
+				.catch(function (error) {
+					console.log(error);
+				});
+		},
+		notifySelect: function (index) {
+			let btnNotify = document.querySelectorAll('.notify span')
+			for (let i = 0; i < btnNotify.length; i++) {
+				btnNotify[i].classList.remove('is-success')
+				btnNotify[i].classList.remove('is-selected')
+			}
+
+			btnNotify[index].classList.add('is-success')
+			btnNotify[index].classList.add('is-selected')
+		}
+	}
+}
+</script>

@@ -10,10 +10,10 @@
 			随便看看
 		</a>
     </div>
-	<form>
+	<form >
 		<div class="field email">
 			<div class="control has-icons-right">
-				<input name="email" v-model="email" v-validate="'required'" :class="{'input': true, 'is-danger': errors.has('email') }" type="text" placeholder="邮箱" autofocus>
+				<input name="email" v-model="email" v-validate="'required'" :class="{'input': true, 'is-danger': errors.has('email') }" type="text" placeholder="邮箱" tabindex="1" autofocus>
 				<span v-show="errors.has('email')" class="icon is-small is-right"><i class="fa fa-warning"></i></span>
 				<span v-show="errors.has('email')" class="help is-danger">{{ errors.first('email') }}</span>
 			</div>
@@ -21,7 +21,7 @@
 
 		<div class="field password">
 			<div class="control has-icons-right">
-				<input name="password" v-model="password" v-validate="'required'" :class="{'input': true, 'is-danger': errors.has('password') }" type="password" placeholder="密码">
+				<input name="password" v-model="password" v-validate="'required'" :class="{'input': true, 'is-danger': errors.has('password') }" type="password" tabindex="2" placeholder="密码">
 				<span v-show="errors.has('password')" class="icon is-small is-right"><i class="fa fa-warning"></i></span>
 				<span v-show="errors.has('password')" class="help is-danger">{{ errors.first('password') }}</span>
 			</div>
@@ -29,7 +29,7 @@
 
 		<div class="field has-text-centered">
 			<input type="hidden" name="remember" checked>
-			<a class="button is-dark is-medium is-fullwidth" :class="{'is-loading': isLoading}" @click="validateBeforeSubmit">登录</a>
+			<button class="button is-dark is-medium is-fullwidth" tabindex="3" :class="{'is-loading': isLoading}" @click.stop.prevent="validateBeforeSubmit">登录</button>
 		</div>
 
 		<div class="field has-text-centered">
@@ -79,7 +79,6 @@ export default {
 						password: this.password,
 						remember: 1
 					}).then((response) => {
-						console.log(response.data)
 						if (!response.data.success) {
 							this.isLoading = false
 							return

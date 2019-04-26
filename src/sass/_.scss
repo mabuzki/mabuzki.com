@@ -86,59 +86,6 @@ footer .changelog { margin-left: 10px; }
 .page-404 .label, .page-404 .value { color: #FFF!important; text-shadow: 0 0 3px rgba(0,0,0,.35) } 
 .page-404 .btns { margin-top: 20px; }
 
-/*modal*/
-
-.v--modal-overlay {
-	background: #FFF!important;
-}
-.v--modal {
-	border-radius: 8px!important;
-}
-.v--modal-box {
-	padding-bottom: 5px;
-}
-.v--modal-box a.button {
-	box-shadow: 0 2px 2px 0 rgba(0,0,0,0.14), 0 1px 5px 0 rgba(0,0,0,0.12), 0 3px 1px -2px rgba(0,0,0,0.2);
-}
-.v--modal-box a.button:hover {
-	box-shadow: 0 3px 3px 0 rgba(0,0,0,0.14), 0 1px 7px 0 rgba(0,0,0,0.12), 0 3px 1px -1px rgba(0,0,0,0.2)
-}
-
-/* login & sign-up */
-.modal-login h2 , .modal-register h2 , .modal-logout h2 {
-	width: 100%;
-	position: fixed;
-	top: 3rem;
-	left: 0;
-    text-align: center
-}
-
-.v--modal-box .btnHideModal {
-	width: 100%;
-	position: fixed;
-	bottom: 2rem;
-	left: 0;
-	text-align: center
-}
-
-.v--modal-box .field {
-	padding: 0 4rem;
-}
-
-.v--modal-box input {
-	background-color: transparent!important;
-	box-shadow: none!important;
-	border: none;
-	border-bottom: 1px solid #D5D5D5;
-	border-radius: 0!important;
-	font-size: 1.25rem;
-	letter-spacing: 1px
-}
-
-.v--modal-box .fa-warning {
-	color: red;
-}
-
 /* page-user */
 .user-header { position: relative; width: 100%!important; height: 300px; overflow: hidden; }
 .user-header .mask { position: absolute; left: 0; right: 0; top: 0; width: 100%; height: 300px; background: rgba(0,0,0,.45); z-index: 2 }
@@ -199,7 +146,7 @@ footer .changelog { margin-left: 10px; }
 .profile-avatar-editing:hover .profile-avatar-select { opacity: 1; }
 .profile-avatar-editing .profile-avatar-select button { width: 100%!important; height: 100%; padding: 0; color: #FFF; background: none!important; border: none!important; box-shadow: none!important;  outline: none; cursor: pointer; }
 
-.profile-avatar-editing .profile-avatar-select button .pick { color: #FFF!important; margin-top: 12px; }
+.profile-avatar-editing .profile-avatar-select button .pick { color: #FFF!important; }
 .profile-avatar-editing .profile-avatar-select button .pick .icon { font-size: 2.65em; margin-bottom: 5px!important; }
 
 .modal-avatar-picker {

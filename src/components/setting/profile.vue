@@ -51,7 +51,7 @@ export default {
 	name: 'SettingProfile',
 	data () {
 		return {
-			userAvatar: this.GLOBAL.api + '/avatar/' + this.$store.state.userinfo.id + '/2',
+			userAvatar: this.$store.state.userinfo.avatar + '!avatar_large',
 			signature: '',
 			cropped: null,
 			cropResultIsActive: false,
@@ -60,11 +60,28 @@ export default {
 			isLoading: false,
 		}
 	},
+	computed: {
+		userStatus() {
+			let userinfo = {
+				avatar: this.$store.state.userinfo.avatar
+			}
+			return userinfo
+		}
+	},
+	watch: {
+		userStatus: function (_new) {
+			if (_new.avatar) {//监视用户是否更换了avatar
+				this.userAvatar = this.GLOBAL.avatar + _new.avatar + '!avatar_large'
+			} else {
+				this.userAvatar = null
+			}
+		}
+	},
 	beforeMount () {
 		if ( !this.$store.state.userinfo.id ) return false
 		this.$http.get( '/user-profile/' + this.$store.state.userinfo.id )
 			.then((response) => {
-				this.signature = response.data.userinfo.bio
+				this.signature = response.data.userinfo.signature
 				this.signatureUnLoaded = false
 			})
 			.catch(function (error) {
@@ -98,3 +115,8 @@ export default {
 	}
 }
 </script>
+
+<style scoped>
+
+</style>
+

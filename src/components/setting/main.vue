@@ -10,6 +10,9 @@
 						<p class="control">
 							<router-link to="/setting/account" class="button">设置</router-link>
 						</p>
+						<p class="control">
+							<router-link to="/setting/verify" class="button">验证账号</router-link>
+						</p>
 					</div>
 				</div>
 				

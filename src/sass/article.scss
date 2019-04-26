@@ -58,5 +58,5 @@ main.article .image img {
 
 main.article .article-editor { margin: 0 3rem 3.5rem; }
 main.article .comments:empty::before { content: "(" attr(title) ")"; width: 100%; display: block; text-align: center; font-size: small; color: #bbbbbb; }
-main.article .article-content { margin-bottom: 4rem; }
+main.article .article-content { margin-bottom: 4rem; min-height: 260px; }
 main.article .article-detail { margin-bottom: 4rem; }

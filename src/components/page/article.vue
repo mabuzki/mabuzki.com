@@ -1,49 +1,46 @@
 <template id="template">
 <main class="article">
-	<div class="container" v-if="articleLoading">
-	</div>
-	<div class="container" v-else>
+	<div class="container">
 		<article>
 			<header>
-				<h1 class="title is-2">{{ articleSubject }}</h1>
+				<h1 class="title is-2">{{ article.subject }}</h1>
 				<div class="media editor-header">
 					<div class="media-left avatar">
-						<router-link :to="{name:'u',params: {uid: articleUserId}}">
-							<img v-bind:src="articleUserAvatar" class="image is-48x48 avatar">
+						<router-link :to="{name:'u',params: {uid: article.authorid}}">
+							<img v-bind:src="article.avatar" class="image is-48x48 avatar">
 						</router-link>
 					</div>
 					<div class="media-content">
-						<router-link :to="{name:'u',params: {uid: articleUserId}}">
-							{{ articleUserName }}
+						<router-link :to="{name:'u',params: {uid: article.authorid}}">
+							{{ article.author }}
 						</router-link>
 						<p>
-							<small class="post_date" :title="articlePostDateTitle">{{ articlePostDate }}</small>
+							<small class="post_date" :title="article.date_post_title">{{ article.date_post }}</small>
 						</p>
 					</div>
 				</div>
 			</header>
 
-			<div class="article-content" v-html="articleContent">
-
-			</div>
+			<div class="article-content" v-html="article.content"></div>
 		</article>
-		<footer class="lazyload">
+		<!-- <footer class="lazyload"> -->
+		<footer>
 			<div class="box article-editor">
 				<div class="media comment-header">
 					<div class="media-left avatar">
-						<router-link :to="{name:'u', params: {uid: userId}}">
+						<router-link :to="{name:'u', params: {uid: this.$store.state.userinfo.id}}">
 							<img v-bind:src="userAvatar" class="image is-32x32 avatar">
 						</router-link>
 					</div>
 					<div class="media-content">
-						<router-link :to="{name:'u', params: {uid: userId}}">
-							{{ userName }}
+						<router-link :to="{name:'u', params: {uid: this.$store.state.userinfo.id}}">
+							{{ this.$store.state.userinfo.name }}
 						</router-link>
 					</div>
 				</div>
 				<div id="editor" class="editor">comments</div>
 				<div class="media">
-					<a class="media-right button btn-reply" @click="doThat">回复</a>
+					<a class="media-right button btn-reply" :class="{'is-loading': BtnCommentisLoading}" @click="doThat">回复</a>
 				</div>
 			</div>
 
@@ -57,51 +54,46 @@
 			</div>
 		</footer>
 	</div>
+	<remote-js :js-url="'../js/tinymce/tinymce.min.js'" :js-load-call-back="loadTinymceJS"></remote-js>
 </main>
 </template>
 
 <script>
+import RemoteJs from '@/components/RemoteJs'
+
 export default {
 	name: 'Articles',
 	data () {
 		return {
-			articleLoading: true,
-			articleUserId: '',
-			articleUserName: '',
-			articleUserAvatar: '',
-			articleSubject: '',
-			articlePostDate: '',
-			articlePostDateTitle: '',
-			articleContent: '',
-			userId: this.$store.state.userinfo.id,
-			userName: this.$store.state.userinfo.name,
+			article: {
+				result: '',
+				subject: '',
+				date_post: '',
+				date_post_title: '',
+				content: '',
+				authorid: '',
+				author: '',
+				avatar: 'data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==',
+			},
 			userAvatar: 'data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==',
 			replyHeader: '',
 			selfHeader: '',
-			comments: []
+			comments: [],
+			BtnCommentisLoading: false
 		}
 	},
+	components: {//eslint-disable-line
+		RemoteJs
+	},
 	beforeMount () {
-		const __self = this
-		this.userAvatar = this.GLOBAL.api + '/avatar/' + localStorage.getItem('userid') + '/0'
-
-		// if (localStorage.getItem('token') !== null && localStorage.getItem('userid') !== null) {
-		// 	this.userId = localStorage.getItem('userid')
-		// 	this.userName = localStorage.getItem('username')
-			
-		// }
+		// this.userAvatar = this.GLOBAL.api + '/avatar/' + localStorage.getItem('userid') + '/0'
+		this.userAvatar = this.$store.state.userinfo.avatar + '!avatar_small',
 
 		this.$http.get('/article/' + this.$route.params.id)
 			.then((response) => {
 				this.articleLoading = false
-				this.result = response.data.result
-				this.articleSubject = response.data.result.subject
-				this.articlePostDate = response.data.result.date_post
-				this.articlePostDateTitle = response.data.result.date_post_title
-				this.articleContent = response.data.result.content
-				this.articleUserId = response.data.result.authorid
-				this.articleUserName = response.data.result.author
-				this.articleUserAvatar = this.GLOBAL.api + '/avatar/' + response.data.result.authorid + '/2'
+				this.article = response.data.result
+				this.article.avatar = this.GLOBAL.avatar + response.data.result.avatar + '!avatar_medium'
 			})
 			.catch(function (error) {
 				console.log(error)
@@ -141,14 +133,43 @@ export default {
 	},
 	methods: {
 		doThat: function () {
+			this.$toasted.show('评论回复暂未开放')
 			// if (!UID) return false
-			// let Count = tinymce.activeEditor.plugins.wordcount.getCount();
-			// let Content = tinyMCE.activeEditor.getContent();
-			// console.log(Content);
-			// if (Count === 0) {
-			// 	notie.alert({ type: 'error', text: '对作者无话可说?' });
-			// 	return false;
-			// }
+			if (!this.$store.state.userinfo.id) {
+				this.$toasted.show('您尚未登陆')
+				return false
+			}
+
+			var Count = tinymce.activeEditor.plugins.wordcount.getCount();
+			if (Count < 1) {
+				this.$toasted.show('还没有输入意见')
+				return false;
+			}
+
+			var comment = tinyMCE.activeEditor.getContent();
+			console.log(comment);
+			this.BtnCommentisLoading = true
+			this.$http.post('/comment',
+				{
+					id: this.$route.params.id,
+					authorid: this.$store.state.userinfo.id,
+					comment: comment
+				})
+				.then((response) => {
+					if (!response.data.success) {
+						this.BtnCommentisLoading = false
+						return false
+					}
+					// eslint-disable-next-line
+					setTimeout(() => {
+						
+					}, 2000)
+				})
+				.catch(function (error) {
+					this.BtnCommentisLoading = false
+					console.log(error)
+				})
+			
 
 			// this.comments.unshift({
 			// 	message: Content
@@ -167,7 +188,71 @@ export default {
 			this.$nextTick(function () {
 				console.log(this.$el.textContent) // => '更新完成'
 			})
-		}
+		},
+
+		loadTinymceJS () {//eslint-disable-line
+			// 当使用远程js里的内容时请添加"//eslint-disable-line"防止eslint检测报错
+			var config = {
+				selector: '#editor',
+				menubar: false,
+				toolbar: 'bold italic strikethrough link | bullist blockquote',
+				inline: false,
+				resize: false,
+				statusbar: false,
+				plugins: [
+					'link',
+					'lists',
+					'wordcount',
+					'paste'
+				],
+				language: 'zh_CN',
+				resize: false,
+				object_resizing : false,
+				// quickbars_insert_toolbar: 'customInsertButton',
+				quickbars_insert_toolbar: '',
+				image_caption: true,
+				contextmenu: '',//屏蔽右键上下文
+				quickbars_selection_toolbar: 'bold italic | h2 h3 | blockquote quicklink',
+				paste_data_images: false,
+				paste_filter_drop: false,
+				paste_word_valid_elements: "b,strong,i,em,h1,h2",
+				paste_webkit_styles: "",
+				paste_retain_style_properties: "",
+				paste_as_text: true,
+				init_instance_callback: (editor) => {
+					editor.on('NodeChange', (e) => {
+					})
+
+					editor.on('Focus', (e) => {
+					})
+
+					editor.on('Blur', (e) => {
+						if (editor.getContent()) {
+							editor.contentAreaContainer.classList.add('noplaceholder')
+						} else {
+							editor.contentAreaContainer.classList.remove('noplaceholder')
+						}
+					})
+				},
+				setup: (editor) => {
+					console.log('setup:'+editor)
+				}
+			}
+
+			tinymce.init(config)
+		},
 	}
 }
 </script>
+
+<style scoped>
+
+</style>
+
+<style>
+.tox-tinymce {
+	margin: 10px 0
+}
+</style>
+
+

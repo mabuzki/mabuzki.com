@@ -8,64 +8,95 @@ export default new Router({
 	base: __dirname,
 	linkActiveClass: 'active-link',
 	linkExactActiveClass: 'is-selected',
+	scrollBehavior (to, from, savedPosition) {
+		if (savedPosition) {
+			return savedPosition
+		} else {
+			if (from.meta.keepAlive) {        
+				from.meta.savedPosition = document.body.scrollTop;      
+			}        
+			return { x: 0, y: to.meta.savedPosition || 0 } 
+		}
+	},
 	routes: [
 		{
 			path: '/',
 			name: 'index',
-			component: resolve => require(['@/components/index'], resolve)
+			component: () => import('@/components/index')
 		},
 		{
 			path: '/new',
-			component: resolve => require(['@/components/page/new.vue'], resolve)
+			name: 'new',
+			component: () => import('@/components/page/new.vue')
 		},
 		{
 			path: '/lab',
-			component: resolve => require(['@/components/page/lab.vue'], resolve)
-		},
-		{
-			path: '/hire-me',
-			component: resolve => require(['@/components/page/hire.vue'], resolve)
+			component: () => import('@/components/page/lab.vue')
 		},
 		{
 			path: '/u/:uid',
 			name: 'u',
-			component: resolve => require(['@/components/page/user.vue'], resolve)
+			component: () => import('@/components/page/user.vue'),
+			meta: {
+				keepAlive: true,
+			}
 		},
 		{
 			path: '/message',
 			name: 'message',
-			component: resolve => require(['@/components/page/message.vue'], resolve)
+			component: () => import('@/components/page/message.vue')
 		},
 		{
 			name: 'setting',
 			path: '/setting',
-			component: resolve => require(['@/components/setting/main.vue'], resolve),
+			component: () => import('@/components/setting/main.vue'),
 			children: [
 				{
 					path: 'account',
-					component: resolve => require(['@/components/setting/account.vue'], resolve)
+					component: () => import('@/components/setting/account.vue')
 				},
 				{
 					path: 'profile',
-					component: resolve => require(['@/components/setting/profile.vue'], resolve)
+					component: () => import('@/components/setting/profile.vue')
+				},
+				{
+					path: 'verify',
+					component: () => import('@/components/setting/verify.vue')
 				}
 			]
 		},
 		{
 			path: '/articles',
-			component: resolve => require(['@/components/page/articles.vue'], resolve)
+			name: 'articles',
+			component: () => import('@/components/page/articles.vue'),
+			meta: {
+				keepAlive: true,
+			}
 		},
 		{
 			path: '/article/:id',
-			component: resolve => require(['@/components/page/article.vue'], resolve)
+			name: 'article',
+			component: () => import('@/components/page/article.vue')
 		},
 		{
 			path: '/draft',
-			component: resolve => require(['@/components/page/draft.vue'], resolve)
+			name: 'draft',
+			component: () => import('@/components/page/draft.vue'),
+			meta: {
+				hideFooter: true,
+			}
 		},
 		{
 			path: '/changelog',
-			component: resolve => require(['@/components/page/changelog.vue'], resolve)
+			component: () => import('@/components/page/changelog.vue')
+		},
+		{
+			path: '/hire-me',
+			component: resolve => require(['@/components/page/hire.vue'], resolve),
+			meta: {
+				hideHeader: true,
+				hideFooter: true
+			}
 		},
 		{ path: '*', component: { template: '<div>404</div>' } }
 	]

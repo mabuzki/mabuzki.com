@@ -1,0 +1,52 @@
+/*modal*/
+
+.v--modal-overlay {
+	background: #FFF!important;
+}
+.v--modal {
+	border-radius: 8px!important;
+}
+.v--modal-box {
+	padding-bottom: 5px;
+}
+.v--modal-box a.button {
+	transition: all .15s ease-in;
+}
+.v--modal-box a.button:hover {
+	box-shadow: 0 2px 15px rgba(0,0,0,.3);
+}
+
+/* login & sign-up */
+.modal-login h2 , .modal-register h2 , .modal-logout h2 {
+	width: 100%;
+	position: fixed;
+	top: 3rem;
+	left: 0;
+    text-align: center
+}
+
+.v--modal-box .btnHideModal {
+	width: 100%;
+	position: fixed;
+	bottom: 2rem;
+	left: 0;
+	text-align: center
+}
+
+.v--modal-box .field {
+	padding: 0 4rem;
+}
+
+.v--modal-box input {
+	background-color: transparent!important;
+	box-shadow: none!important;
+	border: none;
+	border-bottom: 1px solid #D5D5D5;
+	border-radius: 0!important;
+	font-size: 1.25rem;
+	letter-spacing: 1px
+}
+
+.v--modal-box .fa-warning {
+	color: red;
+}

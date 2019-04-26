@@ -4,11 +4,11 @@
 		<div class="container">
 			<div class="media">
 				<div class="avatar media-left">
-					<img :src="userAvatar" class="image is-128x128 avatar">
+					<img :src="userinfo.userAvatar" class="image is-128x128 avatar">
 				</div>
 				<div class="media-content">
-					<h3 class="title is-3">{{ username }}</h3>
-					<div class="bio">{{ bio }}</div>
+					<h3 class="title is-3">{{ userinfo.username }}</h3>
+					<div class="signature">{{ userinfo.signature }}</div>
 				</div>
 				<div class="media-right" v-if="this.$store.state.userinfo.id == this.$route.params.uid">
 					<router-link to="/setting">
@@ -20,11 +20,11 @@
 	</section>
 	<section class="section">
 		<div class="container">
-			<div class="content" v-if="nopost">
+			<div class="content" v-if="userinfo.nopost">
 				还没发表过内容
 			</div>
 			<div class="content" v-else>
-				<div class="card card-article" v-for="article in articles" :key="article.id" @click="jumpToArticle(article.id)">
+				<div class="card card-article" v-for="article in userinfo.articles" :key="article.id" @click="jumpToArticle(article.id)">
 					<header class="card-header">
 						<p class="card-header-title">
 							{{ article.subject }}
@@ -47,13 +47,16 @@ export default {
 	name: 'user',
 	data() {
 		return {
-			userid: '',
-			username: '',
-			bio: '',
-			userAvatar: 'data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==',
-			userinfo: '',
-			nopost: false,
-			articles: []
+			userinfo: {
+				userid: '',
+				username: '',
+				signature: '',
+				// userAvatar: 'data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==',
+				userAvatar: 'data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==',
+				userinfo: '',
+				nopost: true,
+				articles: []
+			}
 		}
 	},
 	computed: {
@@ -64,14 +67,20 @@ export default {
 	watch: {
 		getUID: function (uid) {
 			if (!uid) return false
-			this.username = this.bio = ''
-			this.userAvatar = 'data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw=='
+			this.userinfo.username = this.signature = ''
+			this.userinfo.userAvatar = 'data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw=='
 			this.getUserInfo(uid)
 			this.nopost = false
 		}
 	},
-	beforeMount() {
-		this.getUserInfo(this.$route.params.uid)
+	beforeRouteEnter (to, from, next) {
+		next( vm => {
+			vm.getUserInfo(vm.$route.params.uid)
+		})
+	},
+	beforeRouteLeave (to, from, next) {
+		// ...
+		next()
 	},
 	methods: {
 		getUserInfo (uid) {
@@ -79,30 +88,20 @@ export default {
 				.then( (params) => {
 					if (params.data.success) {
 						if (params.data.userinfo.status === 0) {
-							this.username = params.data.userinfo.username
-							this.bio = params.data.userinfo.bio
-							this.userAvatar = this.GLOBAL.avatar + params.data.userinfo.id + '/2'
+							this.userinfo.username = params.data.userinfo.username
+							this.userinfo.signature = params.data.userinfo.signature
+							this.userinfo.userAvatar = this.GLOBAL.avatar + params.data.userinfo.avatar + '!avatar_medium'
 							if (!params.data.articles[0]) {
-								this.nopost = true
+								this.userinfo.nopost = true
 							} else {
-								this.nopost = false
-								this.articles = params.data.articles
+								this.userinfo.nopost = false
+								this.userinfo.articles = params.data.articles
 							}
 						} else if (params.data.userinfo.status === -1) {
 
 						}
 					}
 				})
-			
-			// this.$http.get( '/matrix/user-article/' + uid + '/1')
-			// 	.then( (_params) => {
-			// 		if ( !_params.data.result ) {
-			// 			this.nopost = true
-			// 		} else {
-			// 			this.noposet = false
-						
-			// 		}
-			// 	})
 		},
 		jumpToArticle(id) {
 			this.$router.push({path: '/article/'+id});
@@ -122,6 +121,9 @@ export default {
 }
 time {
 	font-size: smaller
+}
+.card.card-article {
+	margin-bottom: 2rem;
 }
 </style>
 

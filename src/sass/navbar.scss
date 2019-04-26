@@ -32,6 +32,17 @@ header.navbar .link-user-avatar img {
 	z-index: 2;
 }
 
+header.navbar .link-user-avatar em {
+	position: absolute;
+    bottom: 7px;
+    z-index: 2;
+    background: #1a73e8;
+    border-radius: 50rem;
+    color: #FFF;
+    font-style: normal;
+    font-size: 9px;
+    padding: 0 5px;
+}
 // .navbar.is-black .navbar-brand a , .navbar.is-black .navbar-start a {
 // 	text-shadow: 0 0 5px rgba(0, 0, 0, .5);
 // }

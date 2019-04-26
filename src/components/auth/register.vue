@@ -160,6 +160,7 @@ export default {
 						this.isLoading = false
 						if (!response.data.success) {
 							for (var o in response.data.extra) {
+								console.log(o)
 								let target = document.querySelector('input[name=' + o + ']')
 								target.classList.add('is-danger')
 								target.nextElementSibling.style.display = ''

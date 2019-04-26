@@ -31,7 +31,6 @@ export default {
 	},
 	beforeMount () {
 		var ua = navigator.userAgent;
-
 		var android = ua.match(/(Android);?[\s\/]+([\d.]+)?/);
 		var ipad = ua.match(/(iPad).*OS\s([\d_]+)/);
 		var ipod = ua.match(/(iPod)(.*OS\s([\d_]+))?/);
@@ -44,16 +43,16 @@ export default {
 		var navbar = document.querySelector('header.navbar')
 		document.querySelector('#site-main').classList.add('page-index')
 		navbar.classList.add('is-black')
-		navbar.classList.add('is-fixed-top')
 		navbar.classList.add('is-transparent')
+		document.querySelector('html').classList.remove('has-navbar-fixed-top')
 		document.querySelector('footer.footer').classList.add('is-transparent')
 	},
 	beforeDestroy () {
 		var navbar = document.querySelector('header.navbar')
 		document.querySelector('#site-main').classList.remove('page-index')
 		navbar.classList.remove('is-black')
-		navbar.classList.remove('is-fixed-top')
 		navbar.classList.remove('is-transparent')
+		document.querySelector('html').classList.add('has-navbar-fixed-top')
 		document.querySelector('footer.footer').classList.remove('is-transparent')
 	}
 }
