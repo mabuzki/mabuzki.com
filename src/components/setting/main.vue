@@ -1,6 +1,7 @@
 <template>
-	<main>
-		<div class="container page-setting">
+<main class="page-setting">
+	<div class="container">
+		<section>
 			<div class="columns is-mobile">
 				<div class="column is-narrow">
 					<div class="field has-addons" style="width: 50%;">
@@ -15,7 +16,6 @@
 						</p>
 					</div>
 				</div>
-				
 				<div class="column">
 					<div class="buttons has-addons is-right">
 						<a class="button"
@@ -23,9 +23,10 @@
 					</div>
 				</div>
 			</div>
-		</div>
+		</section>
 		<router-view v-if="isRouterAlive"/>
-    </main>
+	</div>
+</main>
 </template>
 
 <script>
@@ -54,6 +55,10 @@ export default {
 				this.reload()
 			}
 		}
+	},
+	beforeRouteEnter (to, from, next) {
+		document.title = '个人设置'
+		next()
 	},
 	beforeCreate () {
 		if ( !this.$store.state.userinfo.id ) {

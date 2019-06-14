@@ -22,7 +22,10 @@ export default new Router({
 		{
 			path: '/',
 			name: 'index',
-			component: () => import('@/components/index')
+			component: () => import('@/components/index'),
+			meta: {
+				showFooter: true
+			}
 		},
 		{
 			path: '/new',
@@ -67,6 +70,12 @@ export default new Router({
 		},
 		{
 			path: '/articles',
+			beforeEnter: (to, from, next) => {
+				next({path: '/articles/1'})
+			}
+		},
+		{
+			path: '/articles/:page',
 			name: 'articles',
 			component: () => import('@/components/page/articles.vue'),
 			meta: {
@@ -76,14 +85,29 @@ export default new Router({
 		{
 			path: '/article/:id',
 			name: 'article',
-			component: () => import('@/components/page/article.vue')
+			component: () => import('@/components/page/article.vue'),
+			beforeEnter: (to, from, next) => {
+				// let ua = navigator.userAgent
+				// to.meta.showReply = false
+				// let android = ua.match(/(Android);?[\s\/]+([\d.]+)?/)
+				// let ipad = ua.match(/(iPad).*OS\s([\d_]+)/)
+				// let ipod = ua.match(/(iPod)(.*OS\s([\d_]+))?/)
+				// let iphone = !ipad && ua.match(/(iPhone\sOS)\s([\d_]+)/)
+				// if ( android || ipad || ipod || iphone) {
+				// 	to.meta.showReply = true
+				// }
+				next()
+			},
+			meta: {
+				hideFooter: true
+			}
 		},
 		{
 			path: '/draft',
 			name: 'draft',
 			component: () => import('@/components/page/draft.vue'),
 			meta: {
-				hideFooter: true,
+				hideFooter: true
 			}
 		},
 		{
@@ -92,7 +116,8 @@ export default new Router({
 		},
 		{
 			path: '/hire-me',
-			component: resolve => require(['@/components/page/hire.vue'], resolve),
+			// component: resolve => require(['@/components/page/hire.vue'], resolve),
+			component:  () => import('@/components/page/hire.vue'),
 			meta: {
 				hideHeader: true,
 				hideFooter: true

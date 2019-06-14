@@ -1,5 +1,5 @@
 <template>
-<main>
+<main class="page-hire">
 	<section class="section">
 		<div class="delta-1"></div>
 		<div class="delta-2"></div>
@@ -14,111 +14,120 @@
 		<div class="line1 line">135px</div>
 		<div class="line2 line">110px</div>
 		<div class="container page-hire">
-			<h2 class="title is-3">
-				Hire me
-			</h2>
+			<div class="leez">
+				<img src="https://junk.mabuzki.com/image/hire_leez.jpg!square_middle" style="width: 100%">
+			</div>
 			<div class="content">
+				<!-- <div class="field is-float-right">
+					<img src="../../assets/image/leez.png" style="width: 120px">
+				</div> -->
+
 				<div class="field">
-					<h4 class="title">联系方式</h4>
+					<h2 class="title">Hire me</h2>
 					<ul>
-						<li>Email：ning.leez#gmail.com</li>
-						<li>QQ：2936300</li>
-						<li>微信号：mr_madness</li>
+						<li>栗宁/男/1983</li>
+						<li>工作经验：<span>web开发7年+，php开发2年+</span></li>
+						<li>期望职位：<span>web前端工程师，全栈工程师</span></li>
+						<li>期望薪资：<span>税前月薪16k，特别喜欢的公司可例外</span></li>
 					</ul>
 				</div>
 
 				<div class="field">
-					<h4 class="title">个人信息</h4>
+					<h2 class="title">联系方式</h2>
 					<ul>
-						<li>栗宁/男/1983</li>
-						<li>工作经验：web开发7年+，php开发2年+</li>
-						<li>期望职位：web前端工程师，全栈工程师</li>
-						<li>期望薪资：税前月薪16k，特别喜欢的公司可例外</li>
+						<li>Email：ning.leez#gmail.com</li>
+						<li>QQ：2936300</li>
+						<li>微信号：<br>
+							<img src="../../assets/image/wechat.jpg" style="max-width: 30%">
+						</li>
 					</ul>
 				</div>
 				
 				<div class="field">
-					<h4 class="title">工作经历</h4>
-				</div>
-
-				<div class="field">
-					<h5 class="title">淘唛(天津)网络科技有限公司/淘唛商城 (2018年10月~至今)</h5>
+					<h2 class="title">工作经历</h2>
+					<h5 class="title">淘唛(天津)网络科技有限公司/淘唛商城</h5>
+					<small>技术栈：AI、Html5、CSS3、PHP</small>
+					<br>
+					<time>2018年10月 — 2019年4月</time>
 					<ol>
 						<li>服务器日常维护；</li>
-						<li>商城专题策划；</li>
-						<li>会员信心统筹收集；</li>
-						<li>公众号维护；</li>
-						<li>涉及技术栈: AI, Html5, CSS3, PHP</li>
+						<li>商城相关插件开发及日常维护；</li>
+						<li>商城营运及专题策划；</li>
+						<li>公众号维护</li>
 					</ol>
 				</div>
 
 				<div class="field">
-					<h5 class="title">深圳链通网络科技有限公司/乐享区块链（ 2018年3月 ~ 2018年7月 ）</h5>
-				</div>
-				<div class="field">
-					<h6></h6>
+					<h5 class="title">深圳链通网络科技有限公司/乐享区块链</h5>
+					<small>技术栈：AI、Html5、CSS3、PHP、Canvas、Hbuilder</small>
+					<br>
+					<time>2018年3月 — 2018年7月</time>
 					<ol>
 						<li>乐享区块链平台vi设计；</li>
-						<li>乐享区块链平台PC端和wap端布局重新设计开发及后续优化；</li>
+						<li>乐享区块链平台PC端和wap端布局设计开发及后续优化；</li>
 						<li>基于Hybrid App开发乐享链安卓端手机APP</li>
-						<li>涉及技术栈: AI, Html5, CSS3, PHP, Canvas charts, Hbuilder</li>
 					</ol>
 				</div>
 
 				<div class="field">
-					<h5>聊城康莱德健康产业有限公司/乐众挖金网 （ 2016年10月 ~ 2017年9月 ）</h5>
-				</div>
-				<div class="field">
+					<h5>聊城康莱德健康产业有限公司/乐众挖金网</h5>
+					<small>技术栈：FW、AI、Html5、CSS3、PHP、Canvas</small>
+					<br>
+					<time>2016年10月 — 2017年9月</time>
 					<ol>
 						<li>乐众挖金网PC端和wap端布局重新设计开发及后续优化；</li>
-						<li>乐众挖金网部分特定需求交易模块的开发工作；</li>
-						<li>乐众挖金网客服系统维护及功能优化</li>
-						<li>涉及技术栈: FW, AI, Html5, CSS3, PHP, Canvas charts</li>
+						<li>乐众挖金网交易模块的开发工作；</li>
+						<li>乐众挖金网客服系统维护及功能优化；</li>
 					</ol>
 				</div>
 
 				<div class="field">
-					<h5>山东高唐汇鑫网络科技服务中心 （ 2012年9月 ~ 2016年7月 ）</h5>
+					<h5>山东高唐汇鑫网络科技服务中心</h5>
+					<small>技术栈：FW, AI, Html5, CSS3, PHP</small>
+					<br>
+					<time>2012年9月 — 2016年7月</time>
 					<ol>
-						<li>负责淘宝卖家业务培训；</li>
+						<li>淘宝卖家业务培训；</li>
 						<li>淘宝店铺装修业务，制图及sdk商业模板制作；</li>
 						<li>discuz、wordpress模板制作；</li>
-						<li>上海赢品商贸外包项目制作及维护：潮妈帮品牌论坛积分商城界面设计开发及后续优化；宝贝购品牌商城PC端及APP端界面设计、海外购品牌界面设计、微信活动页面设计及开发</li>
+						<li>上海赢品商贸外包项目制作及维护：潮妈帮品牌论坛积分商城界面设计开发及后续优化；宝贝购品牌商城PC端及APP端界面设计、海外购品牌界面设计、微信活动页面设计及开发；</li>
 						<li>其他一些网站外包工作</li>
-						<li>涉及技术栈: FW, AI, Html5, CSS3, PHP</li>
 					</ol>
 				</div>
 
 				<div class="field">
-					<h4>技能清单</h4>
+					<h2>技能清单</h2>
 					<ul>
-						<li>Web开发：PHP</li>
-						<li>Web框架或程序：Lavarel/Wordpress/Discuz</li>
-						<li>前端框架：Vue/JQuery/Bootstrap/Semantic UI/Bulma/Framework7</li>
-						<li>前端工具：WebPack/Npm</li>
-						<li>开发工具：VSCode/Hbuilder/Sublime text/Notepad++/Postman/Git</li>
-						<li>设计工具：AI/Fireworks</li>
-						<li>数据库相关：MySQL</li>
-						<li>服务器相关：CentOS基础配置及日常维护</li>
-						<li>使用语言：普通话/英语(阅读技术文档)</li>
+						<li>Web开发：<br>PHP</li>
+						<li>Web框架或程序：<br>Lavarel/Wordpress/Discuz</li>
+						<li>前端框架：<br>Vue/JQuery/Bootstrap/Semantic UI/Bulma/Framework7</li>
+						<li>前端工具：<br>NodeJS/WebPack/Npm/Postman/Git</li>
+						<li>开发工具：<br>VSCode/Hbuilder/Notepad++</li>
+						<li>设计工具：<br>AI/Fireworks</li>
+						<li>数据库相关：<br>MySQL</li>
+						<li>服务器相关：<br>CentOS配置及日常维护</li>
 					</ul>
 				</div>
 
 				<div class="field">
-					<h4 class="title">个人网站</h4>
+					<h2 class="title">个人网站</h2>
 					<p><a href="https://mabuzki.com">mabuzki.com</a></p>
 				</div>
 
-				<div class="field">
-					<h4 class="title">个人兴趣</h4>
+				<!-- <div class="field">
+					<h2 class="title">个人兴趣</h2>
 					<p>唱歌、美食、欧美影视粉</p>
-				</div>
+				</div> -->
 
 				<hr>
 
 				<div class="field">
-					<h4 class="title">致谢</h4>
+					<h2 class="title">致谢</h2>
 					<p>感谢您花时间阅读我的简历，期待能有机会和您共事。</p>
+				</div>
+
+				<div class="field">
+					<router-link to="./">&lt; 我的个人项目 &gt;</router-link>
 				</div>
 
 			</div>
@@ -128,87 +137,79 @@
 </template>
 
 <script>
+import './../../sass/hire.scss'
 export default {
-	name: 'hire'
+	name: 'hire',
+	beforeRouteEnter (to, from, next) {
+		document.querySelector('html').classList.remove('has-navbar-fixed-top')
+		document.title = '栗子的简历'
+		next(vm => {
+			vm.$store.commit('showFooter', false)
+		})
+	},
+	beforeRouteLeave (to, from, next) {
+		this.$store.commit('showFooter', true)
+		next()
+	},
 }
 </script>
 
 <style scoped>
-main {
+.page-hire {
 	padding-top: 0;
 	overflow: hidden;
-	background: rgba(255, 255, 255,.9);
+	background: url(../../assets/image/hire_me_bg.jpg);
 }
-main section {
+.page-hire section {
 	position: relative;
+	background: rgba(255, 255, 255,.96);
 }
-main .container {
+@media (max-width: 660px) {
+	.page-hire section {
+		padding: 0
+	}
+}
+.page-hire .container {
 	padding: 2rem;
-    border: 1px solid #0058bc;
+	/* border: 2px solid #0058bc; */
+	/* background: #FFF; */
+	background: rgba(255, 255, 255,.96);
+	color: #222;
+	box-shadow: 0 0 15px rgba(78, 50, 146, 0.4);
+	/* border-radius: 2rem; */
+	font-family: "plantc", "Source Han Serif", serif;
+	font-size: calc(18px + (26 - 18) * var(--view-minmax));
 }
-</style>
-
-<style>
-@keyframes rotate {
-	0% {
-		transform:rotate(0) scale(1);
-	}
-	50% {
-		transform:rotate(180deg) scale(1.3);
-	}
-	100% {
-		transform:rotate(360deg) scale(1);
-	}
-}
-
-@keyframes rotateReverse {
-	0% {
-		transform:rotate(0);
-	}
-	100% {
-		transform:rotate(-360deg);
+@media (max-width: 660px) {
+	.page-hire .container {
+		padding: 1.5rem;
+		border: none;
+		box-shadow: none;
+		border-radius: 0
 	}
 }
-
-@keyframes circleScale {
-	0% {
-		transform:scale(1);
-	}
-	50% {
-		transform:scale(1.3);
-	}
-	100% {
-		transform:scale(1);
-	}
-}
-
-body {
-	background: url(../../assets/image/hire_me_bg.jpg)
-}
-
-html.has-navbar-fixed-top, body.has-navbar-fixed-top {
-	padding-top: 0;
-}
-
 .line {
-	background: #0058bc
-}
-.line1 , .line2 {
-	width: 135px;
+	background: #0058bc;
+	font-size: xx-small;
 	height: 1px;
+}
+.line1 {
 	position: absolute;
-	left: 20%;
-	bottom: 18%;
-	font-size: xx-small
+	width: 135px;
+	left: 50%;
+	top: 18%;
+	margin-left: -320px;
+	
 }
 .line2 {
+	position: absolute;
 	width: 110px;
 	transform: rotate(90deg);
 	left: auto;
 	bottom: auto;
-	right: 7%;
+	right: 50%;
 	top: 20%;
-
+	margin-right: -410px;
 }
 .line1::before, .line2::before {
 	content: '';
@@ -266,8 +267,9 @@ html.has-navbar-fixed-top, body.has-navbar-fixed-top {
 }
 .circle-1 {
 	position: relative;
-	top: 5rem;
-	left: 5rem;
+	top: 94vh;
+    left: 50%;
+    margin-left: -330px;
 }
 .circle-1-1 {
 	position: absolute;
@@ -308,6 +310,76 @@ html.has-navbar-fixed-top, body.has-navbar-fixed-top {
 	border-radius: 50%;
 	border: 1px solid #0058bc;
 	animation: circleScale 20s infinite linear
+}
+div.leez {
+	margin-left: -2rem;
+    margin-top: -2rem;
+	margin-right: -2rem;
+	margin-bottom: 6rem;
+}
+h2 {
+	padding-bottom: 2rem;
+}
+
+h5 {
+	margin-bottom: 0!important
+}
+
+time {
+	font-size: smaller;
+	color: #275489
+}
+small {
+	display: inline-block;
+    background: #FAFAFA;
+	padding: 0 5px;
+	font-size: smaller;
+    border: 1px solid #E5E5E5;
+    border-radius: 4px;
+    margin: 5px 0 0;
+}
+.field {
+	margin-bottom: 6rem;
+}
+@media (max-width: 641px) {
+	li>span{
+		display: block
+	}
+}
+</style>
+
+<style>
+@keyframes rotate {
+	0% {
+		transform:rotate(0) scale(1);
+	}
+	50% {
+		transform:rotate(180deg) scale(1.3);
+	}
+	100% {
+		transform:rotate(360deg) scale(1);
+	}
+}
+
+@keyframes rotateReverse {
+	0% {
+		transform:rotate(0);
+	}
+	100% {
+		transform:rotate(-360deg);
+	}
+}
+
+@keyframes circleScale {
+	0% {
+		transform:scale(1);
+	}
+	50% {
+		transform:scale(1.3);
+	}
+	100% {
+		transform:scale(1);
+	}
 }
 </style>
 

@@ -2,24 +2,22 @@
 <section class="section">
 	<div class="container setting-account-section">
 		<form method="POST" @submit.prevent="validateBeforeSubmit">
-			<section>
-				<h2 class="title is-3">验证账号</h2>
-				<div class="field mobile">
-					<h4 class="title is-5">手机</h4>
-					<div class="media">
-						<div class="media-content">
-							<div class="control has-icons-right">
-								<input name="mobile" v-model="mobile" :class="{'input': true}" type="text" placeholder="手机号码">
-								<span class="icon is-small is-right"><i class="fa fa-warning"></i></span>
-								<span class="help is-danger"></span>
-							</div>
-						</div>
-						<div class="media-right">
-							<div class="button" disabled>修改</div>
+			<h2 class="title is-3">验证账号</h2>
+			<div class="field mobile">
+				<h4 class="title is-5">手机</h4>
+				<div class="media">
+					<div class="media-content">
+						<div class="control has-icons-right">
+							<input name="mobile" v-model="mobile" :class="{'input': true}" type="text" placeholder="手机号码">
+							<span class="icon is-small is-right"><i class="fa fa-warning"></i></span>
+							<span class="help is-danger"></span>
 						</div>
 					</div>
+					<div class="media-right">
+						<div class="button" disabled>修改</div>
+					</div>
 				</div>
-			</section>
+			</div>
 		</form>
 	</div>
 </section>

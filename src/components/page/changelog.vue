@@ -20,13 +20,37 @@
 			<div class="content">
 				<div class="field">
 					<h4 class="title">
-						{{ ver }}<em class="title is-6">2019/4/17</em>
+						{{ ver }}<em class="title is-6">2019/5/1</em>
 					</h4>
 					<ul>
+						<li>前端: 文章单页评论框调整</li>
+						<li>前端: 头像上传相关代码调整</li>
+						<li>后端: 部分表内部字段调整</li>
+						<li>后端: 各数据表外部依赖更新</li>
+					</ul>
+				</div>
+				<div class="field">
+					<h4 class="title">
+						0.4.13<em class="title is-6">2019/4/28</em>
+					</h4>
+					<ul>
+						<li>前端: 自适应css调整</li>
+						<li>前端: 文章组件调整</li>
+					</ul>
+				</div>
+				<div class="field">
+					<h4 class="title">
+						0.4.11<em class="title is-6">2019/4/26</em>
+					</h4>
+					<ul>
+						<li>前端: 页面Title提示补全</li>
 						<li>前端: avatar显示方式调整</li>
+						<li>前端: 发表文章页图片现在支持批量上传</li>
+						<li>前端: 文章详情页评论系统加入</li>
 						<li>后端: 精简服务</li>
 						<li>后端: avatar处理流程调整</li>
 						<li>后端: avatar直接上传至oss</li>
+						<li>后端: 文章详情评论系统加入</li>
 					</ul>
 				</div>
 				<div class="field">

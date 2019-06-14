@@ -81,6 +81,7 @@
 
 <script>
 import VueCroppie from 'vue-croppie'
+import 'croppie/croppie.css'
 // eslint-disable-next-line
 Vue.use(VueCroppie)
 
@@ -136,7 +137,7 @@ export default {
 			}).then((response) => {
 				if (response.data.success) {
 					this.$store.commit('refreshCacheKey', this.GLOBAL.generateRandom(10, false))
-					this.$store.commit('avatarUploaded', response.data.newAvatar)
+					this.$store.commit('avatarUploaded', this.GLOBAL.avatar + response.data.newAvatar)
 					this.$modal.hide('modalAvatarPicker')
 					setTimeout(() => {
 						this.cropResultIsActive = false

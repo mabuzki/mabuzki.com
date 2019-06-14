@@ -2,7 +2,7 @@
 <main class="index">
 	<div class="index-baner">
 		<div class="video-bg" v-if="showVideoBg">
-			<video preload="auto" poster="../assets/image/the_beauty_of_a_second.jpg" autoplay loop muted>
+			<video preload="auto" poster="../assets/image/the_beauty_of_a_second.jpg" autoplay loop muted playsinline>
 				<source src="../assets/image/the_beauty_of_a_second.mp4" type="video/mp4">
 				<source src="../assets/image/the_beauty_of_a_second.webm" type="video/webm">
 			</video>
@@ -29,15 +29,16 @@ export default {
 			showVideoBg: true
 		}
 	},
-	beforeMount () {
-		var ua = navigator.userAgent;
-		var android = ua.match(/(Android);?[\s\/]+([\d.]+)?/);
-		var ipad = ua.match(/(iPad).*OS\s([\d_]+)/);
-		var ipod = ua.match(/(iPod)(.*OS\s([\d_]+))?/);
-		var iphone = !ipad && ua.match(/(iPhone\sOS)\s([\d_]+)/);
+	beforeMount ()  {
+		document.title = '首页 -- Mabuzki.com'
+		var ua = navigator.userAgent
+		var android = ua.match(/(Android);?[\s\/]+([\d.]+)?/)
+		var ipad = ua.match(/(iPad).*OS\s([\d_]+)/)
+		var ipod = ua.match(/(iPod)(.*OS\s([\d_]+))?/)
+		var iphone = !ipad && ua.match(/(iPhone\sOS)\s([\d_]+)/)
 
 		if ( android || ipad || ipod || iphone) {
-			this.showVideoBg = false
+			// this.showVideoBg = false
 		}
 
 		var navbar = document.querySelector('header.navbar')
@@ -45,15 +46,14 @@ export default {
 		navbar.classList.add('is-black')
 		navbar.classList.add('is-transparent')
 		document.querySelector('html').classList.remove('has-navbar-fixed-top')
-		document.querySelector('footer.footer').classList.add('is-transparent')
 	},
-	beforeDestroy () {
+	beforeDestroy() {
+		// ...
 		var navbar = document.querySelector('header.navbar')
 		document.querySelector('#site-main').classList.remove('page-index')
 		navbar.classList.remove('is-black')
 		navbar.classList.remove('is-transparent')
 		document.querySelector('html').classList.add('has-navbar-fixed-top')
-		document.querySelector('footer.footer').classList.remove('is-transparent')
 	}
 }
 </script>

@@ -1,3 +1,12 @@
+@media (max-width: 641px) {
+	.navbar-brand {
+		box-shadow: 0 0 1px rgba(0,0,0,.15)
+	}
+	.navbar.is-transparent .navbar-brand {
+		box-shadow: none
+	}
+}
+
 .navbar { font-size: .85rem; }
 a.navbar-item:hover, a.navbar-item.is-active, a.navbar-link:hover, a.navbar-link.is-active { color: #363636; background: none; border: none }
 .navbar-link { padding-right: 2em; }

@@ -11,6 +11,12 @@ import VueBus from 'vue-bus'
 import VModal from 'vue-js-modal'
 import lazysizes from 'lazysizes'
 import Toasted from 'vue-toasted'
+import VConsole from 'vconsole'
+
+//测试环境启用vconsole
+if (process.env.NODE_ENV === 'development') {
+	new VConsole()
+}
 
 import './../assets/iconfont/iconfont.css'
 import './../sass/app.scss'
@@ -20,7 +26,7 @@ window.Vue = Vue
 Vue.use(Vuex)
 
 //eslint-disable-next-line
-const ver = '0.4.11'
+const ver = '0.5.1'
 window.ver = ver
 
 const store = new Vuex.Store({
@@ -30,7 +36,7 @@ const store = new Vuex.Store({
 			name: localStorage.getItem('username'),
 			token: localStorage.getItem('token'),
 			needverify: localStorage.getItem('needverify'),
-			avatar: global_.avatar + localStorage.getItem('avatar'),
+			avatar: localStorage.getItem('avatar'),
 			// userCacheKey: global_.generateRandom(10, false)
 			userCacheKey: global_.generateRandom(10, false)
 		},
@@ -41,14 +47,14 @@ const store = new Vuex.Store({
 		setUser (state, data) {
 			localStorage.setItem('userid', data.userid)
 			localStorage.setItem('username', data.username)
-			localStorage.setItem('avatar', data.avatar)
+			localStorage.setItem('avatar', global_.avatar + data.avatar)
 			localStorage.setItem('token', data.token)
 			localStorage.setItem('needverify', data.needverify === -1 ? false : true)
 			state.userinfo.id = data.userid
 			state.userinfo.name = data.username
 			state.userinfo.token = data.token
 			state.userinfo.needverify = data.needverify === -1 ? false : true
-			state.userinfo.avatar = data.avatar
+			state.userinfo.avatar = global_.avatar + data.avatar
 			state.userinfo.userCacheKey = global_.generateRandom(10, false)
 			// state.userinfo.userCacheKey = global_.generateRandom(10, false)
 		},

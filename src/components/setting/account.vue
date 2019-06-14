@@ -5,7 +5,6 @@
 			<div class="notification">
 				设置页面暂未开放
 			</div>
-			<section>
 				<h2 class="title is-3">设置</h2>
 				<div class="field mobile">
 					<h4 class="title is-5">手机</h4>
@@ -65,9 +64,8 @@
 						</div>
 					</div>
 				</div>
-			</section>
 
-			<section>
+			
 				<h2 class="title is-3 mt3r">快捷登录</h2>
 				<div class="field weibo">
 					<h4 class="title is-5">微博</h4>
@@ -83,7 +81,6 @@
 						</div>
 					</div>
 				</div>
-			</section>
 		</form>
 	</div>
 </section>

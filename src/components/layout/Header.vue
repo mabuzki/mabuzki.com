@@ -166,7 +166,8 @@ export default {
 			if (_new.id) {
 				this.userId = _new.id
 				this.userName = _new.name
-				this.userAvatar = this.GLOBAL.avatar + _new.avatar + '!avatar_small'
+				// this.userAvatar = this.GLOBAL.avatar + _new.avatar + '!avatar_small'
+				this.userAvatar = _new.avatar + '!avatar_small'
 			} else {
 				this.userId = null
 				this.userName = null
@@ -273,3 +274,4 @@ export default {
 	}
 }
 </script>
+

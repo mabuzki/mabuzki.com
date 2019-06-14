@@ -1,28 +1,31 @@
 <template>
-<main class="draft">
-	<form>
-		<div class="field editor-section">
-			<h1 id="editor_title" class="title is-2"></h1>
-			<div id="editor_content"></div>
-			<!-- <vue-tags-input
-				v-model="tag"
-				placeholder="添加标签"
-				:tags="tags"
-				:validation="validation"
-				:max-tags="5"
-				:maxlength="10"
-				:autocomplete-items="filteredItems"
-				@tags-changed="newTags => tags = newTags"
-				/> -->
-		</div>
-	</form>
-	<div class="console">
-		<span class="icon iconfont" @click.stop.prevent="insertImage">&#xe601;</span>
-		<span class="icon iconfont" @click.stop.prevent="insertVideo">&#xe741;</span>
-		<span class="icon iconfont" @click.stop.prevent="insertHr">&#xe73a;</span>
-		<span class="icon iconfont is-right" @click="addTag">&#xe737;</span>
-	</div>
-	<remote-js :js-url="'../js/tinymce/tinymce.min.js'" :js-load-call-back="loadTinymceJS"></remote-js>
+<main class="page-draft">
+	<section>
+		<form>
+			<div class="console">
+				<span class="icon iconfont" @click.stop.prevent="insertImage">&#xe601;</span>
+				<span class="icon iconfont" @click.stop.prevent="insertVideo">&#xe741;</span>
+				<span class="icon iconfont" @click.stop.prevent="insertHr">&#xe73a;</span>
+				<span class="icon iconfont is-right" @click="addTag">&#xe737;</span>
+			</div>
+			<div class="field editor-section">
+				<h1 id="editor_title" class="title is-2"></h1>
+				<div id="editor_content"></div>
+				<!-- <vue-tags-input
+					v-model="tag"
+					placeholder="添加标签"
+					:tags="tags"
+					:validation="validation"
+					:max-tags="5"
+					:maxlength="10"
+					:autocomplete-items="filteredItems"
+					@tags-changed="newTags => tags = newTags"
+					/> -->
+			</div>
+		</form>
+		
+		<remote-js :js-url="'../js/tinymce/tinymce.min.js'" :js-load-call-back="loadTinymceJS"></remote-js>
+	</section>
 </main>
 </template>
 
@@ -88,6 +91,11 @@ export default {
 				id: this.$store.state.userinfo.id
 			}
 			return userinfo
+		},
+		filteredItems () {
+			return this.autocompleteItems.filter(i => {
+				return i.text.toLowerCase().indexOf(this.tag.toLowerCase()) !== -1;
+			})
 		}
 	},
 	watch: {
@@ -173,59 +181,72 @@ export default {
 		})
 	},
 	methods: {
-		insertImage (e) {
+		insertImage () {
 			// tinyMCE.editors.editor_content.insertContent('&nbsp;<strong>It\'s my button!</strong>&nbsp;')
 			var __self = this
+			//eslint-disable-next-line
 			var editor = tinyMCE.editors.editor_content
 			var input = document.createElement('input')
+			console.log(input)
 			input.setAttribute('type', 'file')
 			input.setAttribute('accept', 'image/*')
+			input.setAttribute('multiple','multiple')
 			input.onchange = function () {
-				var __file = this.files[0]
-				var data = new FormData()
-				var reader = new FileReader()
-				var id, img, image
-				reader.readAsArrayBuffer(__file)
-				reader.onload = (e) => {
-					id = 'blobid-' + (new Date()).getTime()
-					if (typeof e.target.result === 'object') {
-						img = window.URL.createObjectURL(new Blob([e.target.result]))
-					} else {
-						img = e.target.result
-					}
-					editor.insertContent('<figure class="image"><img src="'+ img +'" id="'+ id +'" class="local" /><figcaption></figcaption></figure><p>&nbsp;</p>')
-
-					image = document.querySelector('#' + id)
-					data.append('Filedata', __file)
-					__self.$http.post('/upload/photo', data, {
-						headers: { 'Content-Type': 'multipart/form-data' },
-						timeout: 20000,
-						onUploadProgress: progressEvent => {
-							if (progressEvent.lengthComputable) {
-								// image.parentNode.dataset.progress = progressEvent.loaded / progressEvent.total * 100
-							}
-						}
-					}).then((response) => {
-						console.log(response)
-						if (response.data.success) {
-							image.classList.remove('local')
-							image.src = response.data.image
-							image.dataset.imageId = response.data.imageid
-						}
-					}).catch(function (error) {
-						console.log(error)
-					})
+				if(this.files.length > 9) {
+					__self.$toasted.show('最多一次可选9张图片')
 				}
+
+				//原生js获取的DOM集合是一个类数组对象，所以不能直接利用数组的方法（例如：forEach，map等），需要进行转换为数组后，才能用数组的方法
+				let lists = Array.from(this.files)
+				console.log(lists)
+				
+				lists.forEach( __file => {
+					var data = new FormData()
+					var reader = new FileReader()
+					var id, img, image
+					reader.readAsArrayBuffer(__file)
+					reader.onload = (e) => {
+						id = 'blobid-' + (new Date()).getTime()
+						if (typeof e.target.result === 'object') {
+							img = window.URL.createObjectURL(new Blob([e.target.result]))
+						} else {
+							img = e.target.result
+						}
+						editor.insertContent('<figure class="image"><img src="'+ img +'" id="'+ id +'" class="local" /><figcaption></figcaption></figure><p>&nbsp;</p>')
+
+						image = document.querySelector('#' + id)
+						data.append('Filedata', __file)
+						__self.$http.post('/upload/photo', data, {
+							headers: { 'Content-Type': 'multipart/form-data' },
+							timeout: 20000,
+							onUploadProgress: progressEvent => {
+								if (progressEvent.lengthComputable) {
+									// image.parentNode.dataset.progress = progressEvent.loaded / progressEvent.total * 100
+								}
+							}
+						}).then((response) => {
+							console.log(image)
+							console.log(response)
+							if (response.data.success) {
+								image.classList.remove('local')
+								image.src = response.data.image
+								image.dataset.imageId = response.data.imageid
+							}
+						}).catch(function (error) {
+							console.log(error)
+						})
+					}
+				})
 			}
 			input.click()
 		},
-		insertVideo (e) {
+		insertVideo () {
 			this.$toasted.show('上传影片功能暂未开放')
 		},
-		insertHr (e) {
+		insertHr () {
 			tinyMCE.editors.editor_content.insertContent('<hr/>')
 		},
-		addTag (e) {
+		addTag () {
 			this.$toasted.show('标签功能暂未开放')
 		},
 		loadTinymceJS () {//eslint-disable-line
@@ -242,13 +263,14 @@ export default {
 				resize: false,
 				object_resizing : false,
 				init_instance_callback: function (editor) {
-					editor.on('NodeChange', function (e) {
+					editor.on('NodeChange', function () {
 					})
 
-					editor.on('Focus', function (e) {
+					editor.on('Focus', function () {
+
 					})
 
-					editor.on('Blur', function (e) {
+					editor.on('Blur', function () {
 						if (editor.getContent()) {
 							editor.contentAreaContainer.classList.add('noplaceholder')
 						} else {
@@ -286,13 +308,13 @@ export default {
 				powerpaste_word_import: 'clean',
 				powerpaste_html_import: 'clean',
 				init_instance_callback: (editor) => {
-					editor.on('NodeChange', (e) => {
+					editor.on('NodeChange', () => {
 					})
 
-					editor.on('Focus', (e) => {
+					editor.on('Focus', () => {
 					})
 
-					editor.on('Blur', (e) => {
+					editor.on('Blur', () => {
 						if (editor.getContent()) {
 							editor.contentAreaContainer.classList.add('noplaceholder')
 						} else {
@@ -346,18 +368,15 @@ export default {
 					console.log(error)
 				})
 		}
-	},
-	computed: {
-		filteredItems () {
-			return this.autocompleteItems.filter(i => {
-				return i.text.toLowerCase().indexOf(this.tag.toLowerCase()) !== -1;
-			})
-		}
 	}
 }
 </script>
 
 <style scoped>
+section {
+	padding-left: 0;
+	padding-right: 0
+}
 .editor-section { position: relative; max-width: 640px; min-height: 170px; margin: 0 auto 3rem; }
 input#tags { border: none; padding: 0; }
 #editor_title { max-width: 640px; font-weight: 100; outline: none; position: relative; margin: 0 auto 2rem; padding: 0 6px; }
@@ -374,16 +393,6 @@ input#tags { border: none; padding: 0; }
 .editor-section .over-top:before { content: ''; display: block; position: absolute; left: 0; top: 0; right: 0; width: 100%; height: 0; border-bottom: 2px dashed #529ecc; }
 .editor-section .over-top:before { margin-top: -9px; margin-bottom: 7px; }
 .editor-section .over-bottom:after { bottom: 0; margin-top: 7px; margin-bottom: -9px; }
-
-.console {
-	background: #FFF;
-	position: fixed;
-    bottom: 0;
-    width: 100%;
-	height: 4rem;
-	z-index: 99;
-	box-shadow: 0 0 5px rgba(0,0,0,.1)
-}
 
 .tags-input-default-class {
     padding: .5rem .25rem;
@@ -420,13 +429,23 @@ input#tags { border: none; padding: 0; }
     outline: none;
 }
 .console {
+	background: #FFF;
+	position: fixed;
+    bottom: 0;
+    width: 100%;
+	height: 4rem;
+	z-index: 99;
+	box-shadow: 0 0 5px rgba(0,0,0,.1)
+}
+
+.console {
 	padding: 1.3rem 0 0 2rem ;
 }
 .console span {
 	cursor: pointer;
 }
 .console .iconfont {
-	font-size: 2em;
+	font-size: 1.35em;
 	margin-right: 2rem;
 }
 .console .iconfont.is-right {

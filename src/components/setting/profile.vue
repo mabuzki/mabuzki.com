@@ -71,7 +71,7 @@ export default {
 	watch: {
 		userStatus: function (_new) {
 			if (_new.avatar) {//监视用户是否更换了avatar
-				this.userAvatar = this.GLOBAL.avatar + _new.avatar + '!avatar_large'
+				this.userAvatar = _new.avatar + '!avatar_large'
 			} else {
 				this.userAvatar = null
 			}

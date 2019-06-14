@@ -1,7 +1,7 @@
 <template>
 <main class="page-user">
-	<section class="info">
-		<div class="container">
+	<div class="container">
+		<section class="info">
 			<div class="media">
 				<div class="avatar media-left">
 					<img :src="userinfo.userAvatar" class="image is-128x128 avatar">
@@ -16,33 +16,20 @@
 					</router-link>
 				</div>
 			</div>
-		</div>
-	</section>
-	<section class="section">
-		<div class="container">
-			<div class="content" v-if="userinfo.nopost">
+		</section>
+		<section v-if="userinfo.nopost">
+			<div class="content empty">
 				还没发表过内容
 			</div>
-			<div class="content" v-else>
-				<div class="card card-article" v-for="article in userinfo.articles" :key="article.id" @click="jumpToArticle(article.id)">
-					<header class="card-header">
-						<p class="card-header-title">
-							{{ article.subject }}
-						</p>
-					</header>
-					<div class="card-content">
-						<div class="content" v-html="article.content">
-						</div>
-						<time :datetime="article.date_post" :title="article.date_post_title" v-text="article.date_post"></time>
-					</div>
-				</div>
-			</div>
-		</div>
-	</section>
+		</section>
+		<article-card :articles="userinfo.articles" :dontShowHeader="dontShowHeader" v-else></article-card>	
+	</div>
 </main>
 </template>
 
 <script>
+import articleCard from "@/components/page/articleCard"
+
 export default {
 	name: 'user',
 	data() {
@@ -56,7 +43,8 @@ export default {
 				userinfo: '',
 				nopost: true,
 				articles: []
-			}
+			},
+			dontShowHeader: true
 		}
 	},
 	computed: {
@@ -88,6 +76,7 @@ export default {
 				.then( (params) => {
 					if (params.data.success) {
 						if (params.data.userinfo.status === 0) {
+							document.title = params.data.userinfo.username + ' 的主页 -- Mabuzki.com'
 							this.userinfo.username = params.data.userinfo.username
 							this.userinfo.signature = params.data.userinfo.signature
 							this.userinfo.userAvatar = this.GLOBAL.avatar + params.data.userinfo.avatar + '!avatar_medium'
@@ -98,7 +87,7 @@ export default {
 								this.userinfo.articles = params.data.articles
 							}
 						} else if (params.data.userinfo.status === -1) {
-
+							
 						}
 					}
 				})
@@ -108,22 +97,22 @@ export default {
 		}
 	},
 	beforeDestroy() {
+	},
+	components: {
+		'article-card': articleCard
 	}
 }
 </script>
 
-<style>
+<style scope>
 .page-user .avatar {
 	background: #F2F2F2;
 	width: 90px;
 	height: 90px;
 	border-radius: 50%
 }
-time {
-	font-size: smaller
-}
-.card.card-article {
-	margin-bottom: 2rem;
+.empty {
+	color: #808080
 }
 </style>
 

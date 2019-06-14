@@ -1,5 +1,5 @@
 <template>
-<footer class="footer">
+<footer class="footer is-transparent">
 	<div class="container">
 		<div class="content has-text-centered">
 			<small><a href="http://www.miitbeian.gov.cn" target="_blank">鲁ICP备15020058号-1</a></small>
