@@ -123,11 +123,14 @@ export default {
 		RemoteJs
 	},
 	computed: {
+		// eslint-disable-next-line vue/return-in-computed-property
 		counts() {
+			// eslint-disable-next-line vue/no-side-effects-in-computed-properties
 			this.BtnCommentDisabled = this.count ? false : true
 		}
 	},
 	watch: {
+		// eslint-disable-next-line no-unused-vars
 		counts: (_new) => {
 			// console.log(Vue.prototype)
 			// if(_new > 0) {
@@ -174,12 +177,6 @@ export default {
 			.catch(function (error) {
 				console.log(error)
 			})
-
-				// setTimeout(function () {
-				// 	target.classList.remove('lazyloaded')
-				// }, 300)
-		// 	}
-		// })
 	},
 	beforeDestroy () {
 		// document.removeEventListener('lazybeforeunveil')
@@ -192,12 +189,14 @@ export default {
 				return false
 			}
 
+			// eslint-disable-next-line no-undef
 			this.count = tinymce.activeEditor.plugins.wordcount.getCount()
 			if (this.count < 1) {
 				this.$toasted.show('还没有输入意见')
 				return false;
 			}
 
+			// eslint-disable-next-line no-undef
 			var comment = tinyMCE.activeEditor.getContent();
 			this.BtnCommentisLoading = true
 			this.$http.post('/comment',
@@ -258,6 +257,7 @@ export default {
 				selector = '#editor'
 			}
 
+			// eslint-disable-next-line no-unused-vars
 			var __self = this
 
 			var config = {
@@ -275,6 +275,7 @@ export default {
 					'paste'
 				],
 				language: 'zh_CN',
+				// eslint-disable-next-line no-dupe-keys
 				resize: false,
 				object_resizing : false,
 				// quickbars_insert_toolbar: 'customInsertButton',
@@ -290,6 +291,7 @@ export default {
 				paste_as_text: true,
 				init_instance_callback: (editor) => {
 					editor.on('NodeChange', () => {
+						// eslint-disable-next-line no-undef
 						this.count = tinymce.activeEditor.plugins.wordcount.getCount()
 					})
 
@@ -306,16 +308,21 @@ export default {
 						}
 					})
 				},
+				// eslint-disable-next-line no-unused-vars
 				setup: (editor) => {
 					//console.log('setup:'+editor)
 				}
 			}
 
+			// eslint-disable-next-line no-undef
 			tinymce.init(config)
 		},
 		replyComment(id, name) {
+			// eslint-disable-next-line no-undef
 			tinymce.get('editor').setContent('')
+			// eslint-disable-next-line no-undef
 			tinymce.get('editor').insertContent('@'+name+'&nbsp;')
+			// eslint-disable-next-line no-undef
 			tinymce.get('editor').focus()
 		}
 	}
@@ -434,7 +441,7 @@ export default {
 	.page-article .article-editor #editor {
 		width: 100%;
 		max-height: 72px;
-    	overflow-y: auto;
+		overflow-y: auto;
 	}
 
 	.page-article .article-editor .media-btn {

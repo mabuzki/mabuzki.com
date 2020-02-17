@@ -186,18 +186,18 @@ export default {
 				email: 'demo@mabuzki.com',
 				password: 'demo123',
 				remember: 1
-				}).then((response) => {
-					if (!response.data.success) {
-						this.isLoadingSec = false
-						return
-					}
-					response.data.origin = 'register'
-					this.$store.commit('setUser', response.data)//vuex存储用户状态 userid username token
-					this.$bus.emit('changeUserStatus', response.data)//控制用户状态 pos:header.vue
-				}).catch((error) => {
+			}).then((response) => {
+				if (!response.data.success) {
 					this.isLoadingSec = false
-					console.log(error)
-				})
+					return
+				}
+				response.data.origin = 'register'
+				this.$store.commit('setUser', response.data)//vuex存储用户状态 userid username token
+				this.$bus.emit('changeUserStatus', response.data)//控制用户状态 pos:header.vue
+			}).catch((error) => {
+				this.isLoadingSec = false
+				console.log(error)
+			})
 		}
 	}
 }

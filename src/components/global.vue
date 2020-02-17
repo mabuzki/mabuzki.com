@@ -4,6 +4,7 @@
 const site = process.env.VUE_APP_SITE
 // eslint-disable-next-line
 const api = process.env.VUE_APP_API
+// eslint-disable-next-line no-unused-vars
 const oss = '//junk.mabuzki.com'
 // eslint-disable-next-line
 const avatar = '//junk.mabuzki.com/avatar/'

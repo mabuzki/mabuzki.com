@@ -32,6 +32,7 @@ export default {
 	beforeMount ()  {
 		document.title = '首页 -- Mabuzki.com'
 		var ua = navigator.userAgent
+		// eslint-disable-next-line no-useless-escape
 		var android = ua.match(/(Android);?[\s\/]+([\d.]+)?/)
 		var ipad = ua.match(/(iPad).*OS\s([\d_]+)/)
 		var ipod = ua.match(/(iPod)(.*OS\s([\d_]+))?/)

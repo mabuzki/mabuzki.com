@@ -36,7 +36,6 @@ export default {
 			}, 1500)
 		},
 		hideUserLogout () {
-			let __self = this
 			this.isLoading = true
 			this.$http.post('/auth/logout')
 				.then((response) => {
