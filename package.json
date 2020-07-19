@@ -15,7 +15,7 @@
     "core-js": "^3.6.4",
     "lazysizes": "^5.2.0",
     "loadsh": "0.0.4",
-    "lodash": "^4.17.15",
+    "lodash": "^4.17.19",
     "qs": "^6.9.1",
     "vconsole": "^3.3.4",
     "vee-validate": "^2.0.0-rc.23",
